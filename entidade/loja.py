@@ -1,0 +1,5 @@
+
+
+
+class Loja:
+    pass
