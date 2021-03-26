@@ -20,7 +20,7 @@ class TelaJogo:
         desenvolvedora = input("Desenvolvedora: ")
         genero = input("Genero: ")
         faixa_etaria = input("Faixa etaria: ")
-        preco = input("Preco")
+        preco = input("Preco: ")
 
         return {"nome": nome, "desenvolvedora": desenvolvedora, "genero": genero,
                 "faixa etaria": int(faixa_etaria), "preco": float(preco)}
