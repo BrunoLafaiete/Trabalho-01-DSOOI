@@ -1,10 +1,9 @@
-from entidade.desenvolvedora import Desenvolvedora
 from entidade.compra import Compra
 
 
 class Jogo:
 
-    def __init__(self, nome: str, desenvolvedora: Desenvolvedora, genero: str,
+    def __init__(self, nome: str, desenvolvedora, genero: str,
                  faixa_etaria: int, preco: float):
         self.__nome = nome
         self.__desenvolvedora = desenvolvedora
@@ -27,7 +26,7 @@ class Jogo:
         return self.__desenvolvedora
 
     @desenvolvedora.setter
-    def desenvolvedora(self, desenvolvedora: Desenvolvedora):
+    def desenvolvedora(self, desenvolvedora):
         self.__desenvolvedora = desenvolvedora
         desenvolvedora.incluir_jogo(self)
 
