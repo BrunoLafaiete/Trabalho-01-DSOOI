@@ -3,8 +3,8 @@ from controle.controlador_usuario import ControladorUsuario
 from controle.controlador_jogo import ControladorJogos
 '''from controle.controlador_loja import ControladorLoja
 from controle.controlador_compra import ControladorCompra
-from controle.controlador_comunidade import ControladorComunidade
-from controle.controlador_desenvolvedora import ControladorDesenvolvedora'''
+from controle.controlador_comunidade import ControladorComunidade'''''
+from controle.controlador_desenvolvedora import ControladorDesenvolvedoras
 
 
 class ControladorSistema:
@@ -13,8 +13,8 @@ class ControladorSistema:
         self.__controlador_jogo = ControladorJogos(self)
         '''self.__controlador_loja = ControladorLoja(self)
         self.__controlador_compra = ControladorCompra(self)
-        self.__controlador_comunidade = ControladorComunidade(self)
-        self.__controlador_desenvolvedora = ControladorDesenvolvedora(self)'''
+        self.__controlador_comunidade = ControladorComunidade(self)'''
+        self.__controlador_desenvolvedora = ControladorDesenvolvedoras(self)
         self.__tela_sistema = TelaSistema()
 
     def inicializa_sistema(self):
@@ -46,7 +46,7 @@ class ControladorSistema:
         pass
 
     def desenvolvedora(self):
-        pass
+        self.__controlador_desenvolvedora.abre_tela()
 
     def encerra_sistema(self):
         exit(0)
