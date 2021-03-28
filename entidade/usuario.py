@@ -8,6 +8,7 @@ class Usuario:
         self.__nome = nome
         self.__idade = idade
         self.__saldo = 0
+        self.__compras = []
 
     @property
     def email(self):
@@ -53,3 +54,7 @@ class Usuario:
     def saldo(self, saldo: float):
         if isinstance(saldo, float):
             self.__saldo += saldo
+
+    @property
+    def compras(self):
+        return self.__compras
