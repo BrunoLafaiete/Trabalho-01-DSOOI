@@ -1,19 +1,19 @@
 from limite.tela_sistema import TelaSistema
 from controle.controlador_usuario import ControladorUsuario
+from controle.controlador_comunidade import ControladorComunidade
 '''from controle.controlador_jogo import ControladorJogo
 from controle.controlador_loja import ControladorLoja
 from controle.controlador_compra import ControladorCompra
-from controle.controlador_comunidade import ControladorComunidade
 from controle.controlador_desenvolvedora import ControladorDesenvolvedora'''
 
 
 class ControladorSistema:
     def __init__(self):
         self.__controlador_usuario = ControladorUsuario(self)
+        self.__controlador_comunidade = ControladorComunidade(self)
         '''self.__controlador_jogo = ControladorJogo(self)
         self.__controlador_loja = ControladorLoja(self)
         self.__controlador_compra = ControladorCompra(self)
-        self.__controlador_comunidade = ControladorComunidade(self)
         self.__controlador_desenvolvedora = ControladorDesenvolvedora(self)'''
         self.__tela_sistema = TelaSistema()
 
@@ -30,7 +30,6 @@ class ControladorSistema:
             funcao_escolhida()
 
     def usuario(self):
-        pass
         self.__controlador_usuario.abre_tela()
 
     def jogo(self):
@@ -43,7 +42,7 @@ class ControladorSistema:
         pass
 
     def comunidade(self):
-        pass
+        self.__controlador_comunidade.abre_tela()
 
     def desenvolvedora(self):
         pass
