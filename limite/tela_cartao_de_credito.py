@@ -1,0 +1,2 @@
+class TelaCartaoDeCredito
+  pass
