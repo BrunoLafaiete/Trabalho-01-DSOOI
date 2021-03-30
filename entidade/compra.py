@@ -2,13 +2,10 @@ from datetime import date
 
 
 class Compra:
-    def __init__(self, jogo: Jogo, usuario: Usuario):
+    def __init__(self, jogo, usuario):
         self.__jogo = jogo
         self.__usuario = usuario
         self.__data = date.today()
-        identificador = 0
-        self.__identificador = identificador
-        identificador += 1
 
     @property
     def data(self):

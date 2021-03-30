@@ -51,3 +51,7 @@ class ControladorUsuario:
     def retorna_menu_principal(self):
         self.__continua_nesse_menu = False
 
+    @property
+    def usuarios(self):
+        return self.__usuarios
+

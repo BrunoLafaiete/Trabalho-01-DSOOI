@@ -28,3 +28,7 @@ class ControladorJogos:
             self.__tela_jogo.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora,
                                            "genero": jogo.genero, "faixa etaria": jogo.faixa_etaria,
                                            "preco": jogo.preco})
+
+    @property
+    def jogos(self):
+        return self.__jogos
