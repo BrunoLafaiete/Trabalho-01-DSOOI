@@ -33,10 +33,11 @@ class ControladorSistema:
         self.__controlador_usuario.abre_tela()
 
     def jogo(self):
-        pass
+        self.__controlador_jogo.abre_tela()
 
     def loja(self):
-        pass
+        self.__controlador_loja.incluir_loja(self.__controlador_jogo.jogos)
+        self.__controlador_loja.abre_tela()
 
     def compra(self):
         self.__controlador_compra.abre_tela()
@@ -45,13 +46,27 @@ class ControladorSistema:
         self.__controlador_comunidade.abre_tela()
 
     def desenvolvedora(self):
-        pass
+        self.__controlador_desenvolvedora.abre_tela()
 
     def encerra_sistema(self):
         exit(0)
 
+    @property
     def controlador_usuario(self):
         return self.__controlador_usuario
 
+    @property
     def controlador_jogo(self):
         return self.__controlador_jogo
+    
+    @property
+    def controlador_desenvolvedora(self):
+        return self.__controlador_desenvolvedora
+    
+    @property
+    def controlador_comunidade(self):
+        return self.__controlador_comunidade
+    
+    @property
+    def controlador_compra(self):
+        return self.__controlador_compra
