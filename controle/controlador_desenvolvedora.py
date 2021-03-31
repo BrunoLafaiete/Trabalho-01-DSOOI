@@ -32,6 +32,8 @@ class ControladorDesenvolvedora:
         for desenvolvedora in self.__desenvolvedoras:
             self.__tela_desenvolvedora.mostrar_desenvolvedora({"nome": desenvolvedora.nome,
                                                                "jogos": desenvolvedora.jogos})
+            
+            
 
     def voltar(self):
         self.__continua_nesse_menu = False
