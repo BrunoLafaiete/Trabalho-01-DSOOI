@@ -10,9 +10,9 @@ class ControladorJogo:
         self.__jogos = []
         self.__continua_nesse_menu = True
 
-
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastra_jogo, 2: self.altera_jogo, 3: self.get_dados_jogo, 4: self.lista_jogos, 0: self.voltar}
+        lista_opcoes = {1: self.cadastra_jogo, 2: self.altera_jogo, 
+                        3: self.get_dados_jogo, 4: self.lista_jogos, 0: self.voltar}
         self.__continua_nesse_menu = True
 
         while self.__continua_nesse_menu:
@@ -58,4 +58,3 @@ class ControladorJogo:
     @property
     def jogos(self):
         return self.__jogos
-
