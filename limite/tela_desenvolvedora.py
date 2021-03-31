@@ -1,7 +1,7 @@
-#from limite.tela_abstrata import TelaAbstrata
+from limite.tela_abstrata import TelaAbstrata
+from excecoes.nome_invalido_exception import NomeInvalidoException
 
-
-class TelaDesenvolvedora:
+class TelaDesenvolvedora(TelaAbstrata):
 
     def tela_opcoes(self):
         print("------DESENVOLVEDORA------")
@@ -10,25 +10,39 @@ class TelaDesenvolvedora:
         print("2 - Alterar dados de uma desenvolvedora")
         print("3 - Pegar dados de uma desenvolvedora")
         print("4 - Listar desenvolvedoras")
+        print("0 - Voltar")
         print()
-        opcao_escolhida = int(input("Escolha uma opção: "))
+        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4])
         return opcao_escolhida
 
-    def cadastrar_desenvolvedora(self):
+    def cadastrar_desenvolvedora(self, desenvolvedoras):
         print("-----CADASTRAR UMA DESENVOLVEDORA-----")
-        nome = input("Nome: ")
+        while True:
+            try:
+                nome = input("Nome: ")
+                for desenvolvedora in desenvolvedoras:
+                    if nome == desenvolvedora.nome:
+                        raise NomeInvalidoException
+                return nome
+            except NomeInvalidoException as e:
+                print(e)
 
-        return nome
-
-    def alterar_desenvolvedora(self):
+    def alterar_desenvolvedora(self, desenvolvedoras, nome_antigo):
         print("-----ALTERAR DADOS-----")
-        print("Vamos buscar uma desenvolvedora para alterar...")
-        nome_antigo = input("Nome do Jogo: ")
-        return nome_antigo
-
-        #return {"nome": nome, "desenvolvedora": desenvolvedora, "genero": genero,
-        # "faixa etaria": faixa_etaria, "preco": preco}
+        while True:
+            try:
+                nome = input("Nome: ")
+                for desenvolvedora in desenvolvedoras:
+                    if nome == desenvolvedora.nome and nome != nome_antigo:
+                        raise NomeInvalidoException
+                return nome
+            except NomeInvalidoException as e:
+                print(e)
 
     def mostrar_desenvolvedora(self, dados_desenvolvedora):
-        print("Nome da desenvolvedora: ", dados_desenvolvedora["nome"])
-        print("Jogos da desenvolvedora: ", dados_desenvolvedora["jogos"])
+        print("\nNome da desenvolvedora: ", dados_desenvolvedora["nome"])
+        print("Jogos da desenvolvedora: ", self.le_lista(dados_desenvolvedora["jogos"]) + "\n")
+
+    def escrever_nome(self):
+        nome = input("Nome da Desenvolvedora: ")
+        return nome
