@@ -33,8 +33,6 @@ class ControladorDesenvolvedora:
             self.__tela_desenvolvedora.mostrar_desenvolvedora({"nome": desenvolvedora.nome,
                                                                "jogos": desenvolvedora.jogos})
             
-            
-
     def voltar(self):
         self.__continua_nesse_menu = False
 
@@ -52,3 +50,5 @@ class ControladorDesenvolvedora:
     @property
     def desenvolvedoras(self):
         return self.__desenvolvedoras
+
+    
