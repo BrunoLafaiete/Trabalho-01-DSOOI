@@ -28,7 +28,7 @@ class Jogo:
     @desenvolvedora.setter
     def desenvolvedora(self, desenvolvedora):
         self.__desenvolvedora = desenvolvedora
-        desenvolvedora.incluir_jogo(self)
+        #desenvolvedora.incluir_jogo(self)
 
     @property
     def genero(self):
