@@ -17,4 +17,6 @@ class TelaSistema:
         opcao_escolhida = int(input("Escolha uma opção: "))
         return opcao_escolhida
 
+    def ler_mensagem_erro(self, mensagem):
+        print(mensagem)
 

@@ -1,6 +1,3 @@
-
-
-
 class TelaUsuario:
 
     def tela_opcoes(self):
@@ -21,7 +18,7 @@ class TelaUsuario:
         email = input("Email: ")
         senha = input("Senha: ")
         nome = input("Nome Completo: ")
-        idade = input("Idade: ")
+        idade = int(input("Idade: "))
         return {"email": email, "senha": senha, "nome": nome, "idade": idade}
 
     def verificar_email(self):

@@ -1,6 +1,7 @@
 from limite.tela_abstrata import TelaAbstrata
 from excecoes.nome_invalido_exception import NomeInvalidoException
 
+
 class TelaDesenvolvedora(TelaAbstrata):
 
     def tela_opcoes(self):
@@ -10,9 +11,10 @@ class TelaDesenvolvedora(TelaAbstrata):
         print("2 - Alterar dados de uma desenvolvedora")
         print("3 - Pegar dados de uma desenvolvedora")
         print("4 - Listar desenvolvedoras")
+        print("5 - Remover uma desenvolvedora")
         print("0 - Voltar")
         print()
-        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4])
+        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4, 5])
         return opcao_escolhida
 
     def cadastrar_desenvolvedora(self, desenvolvedoras):
@@ -43,6 +45,7 @@ class TelaDesenvolvedora(TelaAbstrata):
         print("\nNome da desenvolvedora: ", dados_desenvolvedora["nome"])
         print("Jogos da desenvolvedora: ", self.le_lista(dados_desenvolvedora["jogos"]) + "\n")
 
-    def escrever_nome(self):
+    def escrever_nome(self, nomes_desenvolvedoras):
+        print("desenvolvedoras disponiveis: " + self.le_lista(nomes_desenvolvedoras))
         nome = input("Nome da Desenvolvedora: ")
         return nome
