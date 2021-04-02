@@ -22,7 +22,7 @@ class ControladorLoja:
 
     def listar_jogos(self):
         for jogo in self.__loja.jogos:
-            self.__tela.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora,
+            self.__tela.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora.nome,
                                       "genero": jogo.genero, "faixa etaria": jogo.faixa_etaria,
                                       "preco": jogo.preco})
 
@@ -30,7 +30,7 @@ class ControladorLoja:
         genero = self.__tela.conseguir_genero(self.__loja.generos)
         for jogo in self.__loja.jogos:
             if genero == jogo.genero:
-                self.__tela.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora,
+                self.__tela.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora.nome,
                                           "genero": jogo.genero, "faixa etaria": jogo.faixa_etaria,
                                           "preco": jogo.preco})
 
@@ -38,7 +38,7 @@ class ControladorLoja:
         desenvolvedora = self.__tela.conseguir_desenvolvedora(self.__loja.desenvolvedoras)
         for jogo in self.__loja.jogos:
             if jogo.desenvolvedora.nome == desenvolvedora:
-                self.__tela.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora,
+                self.__tela.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora.nome,
                                           "genero": jogo.genero, "faixa etaria": jogo.faixa_etaria,
                                           "preco": jogo.preco})
 
@@ -46,7 +46,7 @@ class ControladorLoja:
         idades = self.__tela.conseguir_idade()
         for jogo in self.__loja.jogos:
             if min(idades) <= jogo.faixa_etaria <= max(idades):
-                self.__tela.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora,
+                self.__tela.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora.nome,
                                           "genero": jogo.genero, "faixa etaria": jogo.faixa_etaria,
                                           "preco": jogo.preco})
 
@@ -54,7 +54,7 @@ class ControladorLoja:
         precos = self.__tela.conseguir_preco()
         for jogo in self.__loja.jogos:
             if min(precos) <= jogo.preco <= max(precos):
-                self.__tela.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora,
+                self.__tela.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora.nome,
                                           "genero": jogo.genero, "faixa etaria": jogo.faixa_etaria,
                                           "preco": jogo.preco})
 
