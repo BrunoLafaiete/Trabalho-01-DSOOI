@@ -1,4 +1,12 @@
-class TelaUsuario:
+import string
+from limite.tela_abstrata import TelaAbstrata
+from excecoes.nome_invalido_exception import NomeInvalidoException
+from excecoes.senha_invalida_exception import SenhaInvalidaException
+from excecoes.email_invalido_exception import EmailInvalidoException
+from excecoes.idade_invalida_exception import IdadeInvalidaException
+from excecoes.credito_invalido_exception import CreditoInvalidoException
+
+class TelaUsuario(TelaAbstrata):
 
     def tela_opcoes(self):
         print()
@@ -9,28 +17,97 @@ class TelaUsuario:
         print("4 - Listar usuários")
         print("5 - Adicionar crédito")
         print("0 - Voltar")
-        opcao_escolhida = int(input("Escolha uma opção: "))
+        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4, 5])
         print()
         return opcao_escolhida
 
-    def cadastrar_usuario(self):
+    def cadastrar_usuario(self, usuarios):
         print("-----CADASTRAR UM USUÁRIO-----")
-        email = input("Email: ")
-        senha = input("Senha: ")
-        nome = input("Nome Completo: ")
-        idade = int(input("Idade: "))
+        while True:
+            email = input("Email: ")
+            try:
+                for usuario in usuarios:
+                    if usuario.email == email:
+                        raise EmailInvalidoException
+                if "@" not in email:
+                    raise EmailInvalidoException
+                else:
+                    entrada = email.split("@")
+                    if entrada[1] != "gmail.com":
+                        raise EmailInvalidoException
+                break
+            except EmailInvalidoException as e:
+                print(e)
+
+        while True:
+            senha = input("Senha: ")
+            try:
+                for digito in senha:
+                    if digito not in string.printable:
+                        raise SenhaInvalidaException
+                break
+            except SenhaInvalidaException as e:
+                print(e)
+                print("Caracteres validos: ", string.printable)
+
+        while True:
+            nome = input("Nome Completo: ")
+            try:
+                for digito in nome:
+                    if digito not in string.ascii_letters:
+                        raise NomeInvalidoException
+                break
+            except NomeInvalidoException as e:
+                print(e)
+
+        while True:
+            idade = int(input("Idade: "))
+            try:
+                if not isinstance(idade, int):
+                    raise IdadeInvalidaException
+                else:
+                    if 0 > idade or 130 < idade:
+                        raise IdadeInvalidaException
+                break
+            except IdadeInvalidaException as e:
+                print(e)
+
         return {"email": email, "senha": senha, "nome": nome, "idade": idade}
 
     def verificar_email(self):
         print("-----ALTERAR DADOS-----")
-        print("Vamos buscar um usuásio para alterar...")
-        email = input("Email: ")
+        while True:
+            email = input("Digite seu email: ")
+            try:
+                if "@" not in email:
+                    raise EmailInvalidoException
+                else:
+                    entrada = email.split("@")
+                    if entrada[1] != "gmail.com":
+                        raise EmailInvalidoException
+                break
+            except EmailInvalidoException as e:
+                print(e)
         return email
 
-    def buscar_pelo_email(self):
+    def buscar_pelo_email(self, usuarios):
         print()
         print("-----BUSCA USUÁRIO-----")
-        email = input("Digite o email do usuário que deseja buscar: ")
+        while True:
+            email = input("Digite o email do usuário que deseja buscar: ")
+            try:
+                for usuario in usuarios:
+                    if usuario.email != email:
+                        raise EmailInvalidoException
+                if "@" not in email:
+                    raise EmailInvalidoException
+                else:
+                    entrada = email.split("@")
+                    if entrada[1] != "gmail.com":
+                        raise EmailInvalidoException
+                break
+            except EmailInvalidoException as e:
+                print(e)
         return email
 
     def devolve_dados_usuario(self, dados_usuario):
@@ -41,19 +118,68 @@ class TelaUsuario:
         print()
 
     def verificar_senha(self):
-        senha = input("Senha: ")
+        while True:
+            senha = input("Senha: ")
+            try:
+                for digito in senha:
+                    if digito not in string.printable:
+                        raise SenhaInvalidaException
+                break
+            except SenhaInvalidaException as e:
+                print(e)
         return senha
 
-    def alterar_usuario(self):
+    def alterar_usuario(self, usuarios):
         print("-----ALTERARANDO OS DADOS-----")
-        email = input("Email: ")
-        senha = input("Senha: ")
-        nome = input("Nome Completo: ")
-        idade = input("Idade: ")
-        return {"email": email, "senha": senha, "nome": nome, "idade": idade}
+        while True:
+            email = input("Novo email: ")
+            try:
+                for usuario in usuarios:
+                    if usuario.email == email:
+                        raise EmailInvalidoException
+                if "@" not in email:
+                    raise EmailInvalidoException
+                else:
+                    entrada = email.split("@")
+                    if entrada[1] != "gmail.com":
+                        raise EmailInvalidoException
+                break
+            except EmailInvalidoException as e:
+                print(e)
 
-    def tela_senha_errada(self):
-        print("VOCÊ DIGITOU UMA SENHA ERRADA!")
+        while True:
+            senha = input("Senha: ")
+            try:
+                for digito in senha:
+                    if digito not in string.printable:
+                        raise SenhaInvalidaException
+                break
+            except SenhaInvalidaException as e:
+                print(e)
+                print("Caracteres validos: ", string.printable)
+
+        while True:
+            nome = input("Nome Completo: ")
+            try:
+                for digito in nome:
+                    if digito not in string.ascii_letters:
+                        raise NomeInvalidoException
+                break
+            except NomeInvalidoException as e:
+                print(e)
+
+        while True:
+            idade = input("Idade: ")
+            try:
+                if not isinstance(idade, int):
+                    raise IdadeInvalidaException
+                else:
+                    if 0 > idade or 130 < idade:
+                        raise IdadeInvalidaException
+                break
+            except IdadeInvalidaException as e:
+                print(e)
+        return {"email": email, "senha": senha, "nome": nome, "idade": idade}
 
     def listar_usuario(self, dados_usuario):
         print()
@@ -61,9 +187,73 @@ class TelaUsuario:
               "Idade do usuário: ", dados_usuario["idade"])
         print()
 
-    def tela_credita(self):
+    def tela_credita(self, usuarios):
         print()
         print("-----ADICIONAR CRÉDITOS IsTeam's-----")
-        email = input("Email do usuário a creditar: ")
-        valor = float(input("Valor que deseja adicionar a conta: "))
+        while True:
+            email = input("Email do usuário a creditar: ")
+            try:
+                for usuario in usuarios:
+                    if usuario.email != email:
+                        raise EmailInvalidoException
+                if "@" not in email:
+                    raise EmailInvalidoException
+                else:
+                    entrada = email.split("@")
+                    if entrada[1] != "gmail.com":
+                        raise EmailInvalidoException
+                break
+            except EmailInvalidoException as e:
+                print(e)
+
+        while True:
+            valor = float(input("Valor que deseja adicionar a conta: "))
+            try:
+                if 1 > valor or valor > 500:
+                    raise CreditoInvalidoException
+                break
+            except CreditoInvalidoException as e:
+                print(e)
+
         return {"email": email, "valor": valor}
+
+    def tela_participa_comunidade(self, usuarios):
+        while True:
+            comunidade = input("Digite o nome da Comunidade que você quer participar: ")
+            try:
+                for digito in comunidade:
+                    if digito not in string.ascii_letters:
+                        raise NomeInvalidoException
+                break
+            except NomeInvalidoException as e:
+                print(e)
+
+        while True:
+            email = input("Digite seu email de usuário: ")
+            try:
+                for usuario in usuarios:
+                    if usuario.email != email:
+                        raise EmailInvalidoException
+                if "@" not in email:
+                    raise EmailInvalidoException
+                else:
+                    entrada = email.split("@")
+                    if entrada[1] != "gmail.com":
+                        raise EmailInvalidoException
+                break
+            except EmailInvalidoException as e:
+                print(e)
+
+        for i in range(3):
+            senha = input("Digite sua senha: ")
+            try:
+                for digito in senha:
+                    if digito not in string.printable:
+                        raise SenhaInvalidaException
+                break
+            except SenhaInvalidaException as e:
+                print(e)
+                print("Caracteres validos: ", string.printable)
+
+        return {"comunidade": comunidade, "email": email, "senha": senha}
+
