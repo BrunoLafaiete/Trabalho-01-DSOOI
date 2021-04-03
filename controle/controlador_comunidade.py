@@ -17,15 +17,14 @@ class ControladorComunidade:
             lista_opcoes[self.__tela_comunidade.tela_opcoes()]()
 
     def cria_comunidade(self):
-        dados_comunidade = self.__tela_comunidade.nova_comunidade()
+        lista_jogos = self.__controlador_sistema.jogos_disponiveis()
+        dados_comunidade = self.__tela_comunidade.nova_comunidade(self.__comunidades, lista_jogos)
         comunidade = Comunidade(dados_comunidade["nome"], dados_comunidade["descricao"])
+        comunidade.jogo = dados_comunidade["jogo"]
         self.__comunidades.append(comunidade)
     
-    '''def adiciona_usuario(self):
-        pass'''
-    
     def busca_comunidade_por_nome(self):
-        nome_a_buscar = self.__tela_comunidade.busca_comunidade()
+        nome_a_buscar = self.__tela_comunidade.busca_comunidade(self.__comunidades)
         for comunidade in self.__comunidades:
             if comunidade.nome == nome_a_buscar:
                 self.__tela_comunidade.retorna_comunidade({"nome": comunidade.nome, "descricao": comunidade.descricao, "numero_participantes": len(self.__usuarios)})
@@ -42,5 +41,15 @@ class ControladorComunidade:
                 self.__tela_comunidade.mostra_comunidades({"nome": comunidade.nome, "descricao": comunidade.descricao,
                                                            "numero_usuarios": len(self.__usuarios)})
 
+    def existe_comunidade(self, name):
+        for comunidade in self.__comunidades:
+            if comunidade.nome == name:
+                return True
+
+
     def retorna_menu_principal(self):
         self.__continua_nesse_menu = False
+
+    @property
+    def comunidades(self):
+        return self.__comunidades
