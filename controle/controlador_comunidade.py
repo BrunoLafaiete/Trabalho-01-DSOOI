@@ -8,6 +8,7 @@ class ControladorComunidade:
         self.__controlador_sistema = controlador_sistema
         self.__usuarios = []
         self.__continua_nesse_menu = True
+        self.__jogos = None
 
     def abre_tela(self):
         lista_opcoes = {1: self.cria_comunidade, 3: self.busca_comunidade_por_nome, 4: self.lista_comunidades,
@@ -16,9 +17,12 @@ class ControladorComunidade:
         while self.__continua_nesse_menu:
             lista_opcoes[self.__tela_comunidade.tela_opcoes()]()
 
+    def incluir_jogos(self, jogos):
+        self.__jogos.append(jogos)
+
     def cria_comunidade(self):
-        lista_jogos = self.__controlador_sistema.jogos_disponiveis()
-        dados_comunidade = self.__tela_comunidade.nova_comunidade(self.__comunidades, lista_jogos)
+        self.__controlador_sistema.jogos_pra_comunidade()
+        dados_comunidade = self.__tela_comunidade.nova_comunidade(self.__comunidades, self.__jogos)
         comunidade = Comunidade(dados_comunidade["nome"], dados_comunidade["descricao"])
         comunidade.jogo = dados_comunidade["jogo"]
         self.__comunidades.append(comunidade)
