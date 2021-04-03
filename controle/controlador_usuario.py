@@ -1,7 +1,6 @@
 from limite.tela_usuario import TelaUsuario
 from entidade.usuario import Usuario
 
-
 class ControladorUsuario:
     def __init__(self, controlador_sistema):
         self.__usuarios = []
@@ -10,14 +9,14 @@ class ControladorUsuario:
         self.__continua_nesse_menu = True
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastra_usuario, 2: self.verifica_usuario_existente, 3: self.informar_dados_usuario, 4: self.lista_usuarios,
+        lista_opcoes = {1: self.cadastra_usuario, 2: self.altera_dados_usuario, 3: self.informar_dados_usuario, 4: self.lista_usuarios,
                         5: self.credita, 0: self.retorna_menu_principal}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
             lista_opcoes[self.__tela_usuario.tela_opcoes()]()
 
     def cadastra_usuario(self):
-        dados_do_usuario = self.__tela_usuario.cadastrar_usuario()
+        dados_do_usuario = self.__tela_usuario.cadastrar_usuario(self.__usuarios)
         usuario = Usuario(dados_do_usuario["email"], dados_do_usuario["senha"], dados_do_usuario["nome"],
                           dados_do_usuario["idade"])
         self.__usuarios.append(usuario)
@@ -27,19 +26,19 @@ class ControladorUsuario:
             self.__tela_usuario.listar_usuario({"email": usuario.email, "nome": usuario.nome, "idade": usuario.idade})
 
     def informar_dados_usuario(self):
-        email_do_usuario = self.__tela_usuario.buscar_pelo_email()
+        email_do_usuario = self.__tela_usuario.buscar_pelo_email(self.__usuarios)
         for usuario in self.__usuarios:
             if usuario.email == email_do_usuario:
                 self.__tela_usuario.devolve_dados_usuario({"email": usuario.email, "creditos": usuario.saldo,
                                                            "nome": usuario.nome, "idade": usuario.idade})
 
     def credita(self):
-        dados_favorecido = self.__tela_usuario.tela_credita()
+        dados_favorecido = self.__tela_usuario.tela_credita(self.__usuarios)
         for usuario in self.__usuarios:
             if usuario.email == dados_favorecido["email"]:
-                usuario.credite(dados_favorecido["valor"])
+                usuario.saldo += dados_favorecido["valor"]
 
-    def verifica_usuario_existente(self):
+    def altera_dados_usuario(self):
         for usuario in self.__usuarios:
             if self.__tela_usuario.verificar_email() == usuario.email:
                 if self.__tela_usuario.verificar_senha() == usuario.senha:
