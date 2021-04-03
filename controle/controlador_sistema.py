@@ -12,9 +12,9 @@ class ControladorSistema:
         self.__controlador_usuario = ControladorUsuario(self)
         self.__controlador_comunidade = ControladorComunidade(self)
         self.__controlador_compra = ControladorCompra(self)
-        self.__controlador_jogo = ControladorJogo(self)
         self.__controlador_loja = ControladorLoja(self)
         self.__controlador_desenvolvedora = ControladorDesenvolvedora(self)
+        self.__controlador_jogo = ControladorJogo(self)
         self.__tela_sistema = TelaSistema()
 
     def inicializa_sistema(self):
@@ -33,14 +33,29 @@ class ControladorSistema:
         self.__controlador_usuario.abre_tela()
 
     def jogo(self):
+        self.__controlador_jogo.gerar_desenvolvedoras(self.__controlador_desenvolvedora.desenvolvedoras)
         self.__controlador_jogo.abre_tela()
 
+    @property
+    def jogos_disponiveis(self):
+        return self.__controlador_jogo.nomes_jogo
+
     def loja(self):
-        self.__controlador_loja.incluir_loja(self.__controlador_jogo.jogos)
-        self.__controlador_loja.abre_tela()
+        if len(self.__controlador_jogo.jogos) == 0:
+            self.__tela_sistema.ler_mensagem_erro("Nao existem jogos para gerar a loja! "
+                                                  "Por favor insira pelo menos um jogo")
+        else:
+            self.__controlador_loja.incluir_loja(self.__controlador_jogo.jogos)
+            self.__controlador_loja.abre_tela()
 
     def compra(self):
-        self.__controlador_compra.abre_tela()
+        if len(self.__controlador_jogo.jogos) == 0 or len(self.__controlador_usuario.usuarios) == 0:
+            self.__tela_sistema.ler_mensagem_erro("Nao existem jogos ou usuarios suficientes para gerar as compras! "
+                                                  "Por favor insira pelo menos um de cada")
+        else:
+            self.__controlador_compra.incluir_usuarios_e_jogos(self.__controlador_jogo.jogos,
+                                                               self.__controlador_usuario.usuarios)
+            self.__controlador_compra.abre_tela()
 
     def comunidade(self):
         self.__controlador_comunidade.abre_tela()
@@ -51,22 +66,18 @@ class ControladorSistema:
     def encerra_sistema(self):
         exit(0)
 
-    @property
     def controlador_usuario(self):
         return self.__controlador_usuario
 
-    @property
     def controlador_jogo(self):
         return self.__controlador_jogo
-    
-    @property
+
     def controlador_desenvolvedora(self):
         return self.__controlador_desenvolvedora
-    
-    @property
+
     def controlador_comunidade(self):
         return self.__controlador_comunidade
-    
-    @property
+
     def controlador_compra(self):
         return self.__controlador_compra
+    
