@@ -36,9 +36,8 @@ class ControladorSistema:
         self.__controlador_jogo.gerar_desenvolvedoras(self.__controlador_desenvolvedora.desenvolvedoras)
         self.__controlador_jogo.abre_tela()
 
-    @property
-    def jogos_disponiveis(self):
-        return self.__controlador_jogo.nomes_jogo
+    def jogos_pra_comunidade(self):
+        self.__controlador_comunidade.incluir_jogos(self.__controlador_jogo.jogos)
 
     def loja(self):
         if len(self.__controlador_jogo.jogos) == 0:
@@ -80,4 +79,3 @@ class ControladorSistema:
 
     def controlador_compra(self):
         return self.__controlador_compra
-    
