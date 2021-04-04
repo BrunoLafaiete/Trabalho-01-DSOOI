@@ -54,6 +54,7 @@ class ControladorSistema:
             self.__controlador_compra.abre_tela()
 
     def comunidade(self):
+        self.__controlador_comunidade.add_usuarios(self.__controlador_usuario.usuarios)
         self.__controlador_comunidade.abre_tela()
 
     def desenvolvedora(self):
