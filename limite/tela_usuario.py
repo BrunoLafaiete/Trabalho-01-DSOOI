@@ -6,6 +6,7 @@ from excecoes.email_invalido_exception import EmailInvalidoException
 from excecoes.idade_invalida_exception import IdadeInvalidaException
 from excecoes.credito_invalido_exception import CreditoInvalidoException
 
+
 class TelaUsuario(TelaAbstrata):
 
     def tela_opcoes(self):
@@ -54,7 +55,7 @@ class TelaUsuario(TelaAbstrata):
             nome = input("Nome Completo: ")
             try:
                 for digito in nome:
-                    if digito not in string.ascii_letters:
+                    if digito not in string.ascii_letters and digito not in [" ", "  "]:
                         raise NomeInvalidoException
                 break
             except NomeInvalidoException as e:
@@ -129,13 +130,13 @@ class TelaUsuario(TelaAbstrata):
                 print(e)
         return senha
 
-    def alterar_usuario(self, usuarios):
+    def alterar_usuario(self, usuarios, email_antigo):
         print("-----ALTERARANDO OS DADOS-----")
         while True:
             email = input("Novo email: ")
             try:
                 for usuario in usuarios:
-                    if usuario.email == email:
+                    if usuario.email == email and usuario.email != email_antigo:
                         raise EmailInvalidoException
                 if "@" not in email:
                     raise EmailInvalidoException
@@ -171,14 +172,14 @@ class TelaUsuario(TelaAbstrata):
         while True:
             idade = input("Idade: ")
             try:
-                if not isinstance(idade, int):
+                idade = int(idade)
+                if 0 > idade or 130 < idade:
                     raise IdadeInvalidaException
-                else:
-                    if 0 > idade or 130 < idade:
-                        raise IdadeInvalidaException
                 break
             except IdadeInvalidaException as e:
                 print(e)
+            except ValueError:
+                print("Por favor insira uma idade valida")
         return {"email": email, "senha": senha, "nome": nome, "idade": idade}
 
     def listar_usuario(self, dados_usuario):
@@ -216,44 +217,3 @@ class TelaUsuario(TelaAbstrata):
                 print(e)
 
         return {"email": email, "valor": valor}
-
-    def tela_participa_comunidade(self, usuarios):
-        while True:
-            comunidade = input("Digite o nome da Comunidade que você quer participar: ")
-            try:
-                for digito in comunidade:
-                    if digito not in string.ascii_letters:
-                        raise NomeInvalidoException
-                break
-            except NomeInvalidoException as e:
-                print(e)
-
-        while True:
-            email = input("Digite seu email de usuário: ")
-            try:
-                for usuario in usuarios:
-                    if usuario.email != email:
-                        raise EmailInvalidoException
-                if "@" not in email:
-                    raise EmailInvalidoException
-                else:
-                    entrada = email.split("@")
-                    if entrada[1] != "gmail.com":
-                        raise EmailInvalidoException
-                break
-            except EmailInvalidoException as e:
-                print(e)
-
-        for i in range(3):
-            senha = input("Digite sua senha: ")
-            try:
-                for digito in senha:
-                    if digito not in string.printable:
-                        raise SenhaInvalidaException
-                break
-            except SenhaInvalidaException as e:
-                print(e)
-                print("Caracteres validos: ", string.printable)
-
-        return {"comunidade": comunidade, "email": email, "senha": senha}
-
