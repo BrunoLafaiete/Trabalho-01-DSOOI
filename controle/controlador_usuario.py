@@ -1,6 +1,7 @@
 from limite.tela_usuario import TelaUsuario
 from entidade.usuario import Usuario
 
+
 class ControladorUsuario:
     def __init__(self, controlador_sistema):
         self.__usuarios = []
@@ -9,8 +10,8 @@ class ControladorUsuario:
         self.__continua_nesse_menu = True
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastra_usuario, 2: self.altera_dados_usuario, 3: self.informar_dados_usuario, 4: self.lista_usuarios,
-                        5: self.credita, 0: self.retorna_menu_principal}
+        lista_opcoes = {1: self.cadastra_usuario, 2: self.verifica_usuario_existente, 3: self.informar_dados_usuario,
+                        4: self.lista_usuarios, 5: self.credita, 0: self.retorna_menu_principal}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
             lista_opcoes[self.__tela_usuario.tela_opcoes()]()
@@ -36,13 +37,13 @@ class ControladorUsuario:
         dados_favorecido = self.__tela_usuario.tela_credita(self.__usuarios)
         for usuario in self.__usuarios:
             if usuario.email == dados_favorecido["email"]:
-                usuario.saldo += dados_favorecido["valor"]
+                usuario.credite(dados_favorecido["valor"])
 
-    def altera_dados_usuario(self):
+    def verifica_usuario_existente(self):
         for usuario in self.__usuarios:
             if self.__tela_usuario.verificar_email() == usuario.email:
                 if self.__tela_usuario.verificar_senha() == usuario.senha:
-                    dados_usuario = self.__tela_usuario.alterar_usuario()
+                    dados_usuario = self.__tela_usuario.alterar_usuario(self.__usuarios, usuario.email)
                     usuario.email = dados_usuario["email"]
                     usuario.senha = dados_usuario["senha"]
                     usuario.nome = dados_usuario["nome"]
