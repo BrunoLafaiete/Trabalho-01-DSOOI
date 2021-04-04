@@ -1,3 +1,5 @@
+from entidade.usuario import Usuario
+
 class Comunidade:
     def __init__(self, nome: str, descricao: str):
         self.__nome = nome
@@ -24,6 +26,8 @@ class Comunidade:
     def usuarios(self):
         return self.__usuarios
 
-    @usuarios.setter
-    def usuarios(self, usuario):
+    def incluir_usuario(self, usuario: Usuario):
         self.__usuarios.append(usuario)
+
+    def excluir_usuario(self, usuario: Usuario):
+        self.__usuarios.remove(usuario)

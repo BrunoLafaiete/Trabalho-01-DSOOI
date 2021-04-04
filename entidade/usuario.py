@@ -8,6 +8,7 @@ class Usuario(Pessoa):
         self.__nome = nome
         self.__idade = idade
         self.__saldo = 0
+        self.__comunidades = []
         self.__jogos = []
         self.__compras = []
 
@@ -41,3 +42,12 @@ class Usuario(Pessoa):
 
     def remover_compra(self, compra):
         self.__compras.remove(compra)
+
+    def comunidades(self):
+        return self.__comunidades
+
+    def incluir_comunidade(self, comunidade):
+        self.__comunidades.append(comunidade)
+
+    def excluir_comunidade(self, comunidade):
+        self.__comunidades.append(comunidade)
