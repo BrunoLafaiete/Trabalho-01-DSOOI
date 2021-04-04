@@ -61,16 +61,16 @@ class TelaUsuario(TelaAbstrata):
                 print(e)
 
         while True:
-            idade = int(input("Idade: "))
+            idade = input("Idade: ")
             try:
-                if not isinstance(idade, int):
-                    raise IdadeInvalidaException
-                else:
+                idade = int(idade)
                     if 0 > idade or 130 < idade:
                         raise IdadeInvalidaException
                 break
             except IdadeInvalidaException as e:
                 print(e)
+             except ValueError:
+                print("Selecione um valor inteiro para a idade!")
 
         return {"email": email, "senha": senha, "nome": nome, "idade": idade}
 
