@@ -1,7 +1,7 @@
 from limite.tela_comunidade import TelaComunidade
 from entidade.comunidade import Comunidade
 from excecoes.usuario_invalido_exception import UsuarioInvalidoException
-from excecoes.nome_invalido_exception import NomeInvalidoException
+
 
 
 class ControladorComunidade:
@@ -18,7 +18,8 @@ class ControladorComunidade:
     def abre_tela(self):
         lista_opcoes = {1: self.cria_comunidade, 2: self.adicionar_usuario_a_comunidade,
                         3: self.excluir_usuario_a_comunidade, 4: self.busca_comunidade_por_nome,
-                        5: self.lista_comunidades,6: self.altera_comunidade, 0: self.retorna_menu_principal}
+                        5: self.lista_comunidades,6: self.altera_comunidade,
+                        7: self.remove_comunidade, 0: self.retorna_menu_principal}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
             lista_opcoes[self.__tela_comunidade.tela_opcoes()]()
@@ -32,21 +33,11 @@ class ControladorComunidade:
         if len(self.__comunidades) == 0:
             self.__tela_comunidade.mostra_mensagem_erro("Não existem comunidades disponiveis!")
         else:
+            self.__tela_comunidade.remove_comunidade()
             comunidade = self.get_comunidade_by_nome()
             for usuario in comunidade.usuarios:
                 usuario.excluir_comunidade(comunidade)
             self.__comunidades.remove(comunidade)
-
-    def get_comunidade_by_nome(self):
-        while True:
-            try:
-                nome = self.__tela_comunidade.pega_nome()
-                for comunidade in self.__comunidades:
-                    if comunidade.nome == nome:
-                        return comunidade
-                raise NomeInvalidoException
-            except NomeInvalidoException:
-                self.__tela_comunidade.mostra_mensagem_erro("Insira um nome de comunidade valido")
 
     def adicionar_usuario_a_comunidade(self):
         if len(self.__comunidades) == 0:
@@ -119,7 +110,8 @@ class ControladorComunidade:
         return self.__comunidades
 
     def get_comunidade_by_nome(self):
-        self.__tela_comunidade.busca_comunidade(self.__comunidades, self.nome_comunidades())
+        comunidade = self.__tela_comunidade.busca_comunidade(self.__comunidades, self.nome_comunidades())
+        return comunidade
 
     def get_usuario(self):
         while True:

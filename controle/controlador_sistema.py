@@ -22,7 +22,7 @@ class ControladorSistema:
 
     def abre_tela(self):
         lista_opcoes = {1: self.jogo, 2: self.loja, 3: self.compra, 4: self.usuario,
-                        5: self.comunidade, 6: self.desenvolvedora ,7: self.encerra_sistema}
+                        5: self.comunidade, 6: self.desenvolvedora, 7: self.encerra_sistema}
 
         while True:
             opcao_escolhida = self.__tela_sistema.tela_inicial()
@@ -30,10 +30,12 @@ class ControladorSistema:
             funcao_escolhida()
 
     def usuario(self):
+        self.__controlador_usuario.gerar_compras(self.__controlador_compra.compras)
         self.__controlador_usuario.abre_tela()
 
     def jogo(self):
-        self.__controlador_jogo.gerar_desenvolvedoras(self.__controlador_desenvolvedora.desenvolvedoras)
+        self.__controlador_jogo.gerar_desenvolvedoras_e_compras(self.__controlador_desenvolvedora.desenvolvedoras,
+                                                                self.__controlador_compra.compras)
         self.__controlador_jogo.abre_tela()
 
     def loja(self):

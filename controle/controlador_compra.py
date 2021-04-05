@@ -41,12 +41,11 @@ class ControladorCompra:
             usuario.debite(jogo.preco)
             self.__compras.append(compra)
         except ValueError:
-            self.__tela_compra.mostra_mensagem_erro("O Usuario eh nao possui a idade necessaria")
+            self.__tela_compra.mostra_mensagem_erro("O Usuario nao possui a idade necessaria")
         except SaldoInsuficienteException as e:
             self.__tela_compra.mostra_mensagem_erro(e)
         except JahPossuiJogoException as e:
             self.__tela_compra.mostra_mensagem_erro(e)
-
 
     def historico_compras_usuario(self):
         email = self.__tela_compra.historico_compras_usuario()
@@ -76,8 +75,8 @@ class ControladorCompra:
         usuario = self.get_usuario()
         for compra in self.__compras:
             if compra.usuario == usuario and compra.jogo == jogo:
-                self.__tela_compra.retorna_informacoes_compra({"jogo": compra.jogo.nome, "usuario": compra.usuario.nome, "data": compra.data})
-
+                self.__tela_compra.retorna_informacoes_compra({"jogo": compra.jogo.nome,
+                                                               "usuario": compra.usuario.nome, "data": compra.data})
 
     def historico_compras_jogo(self):
         jogo = self.get_jogo()
@@ -85,7 +84,6 @@ class ControladorCompra:
         for compra in jogo.compras:
             self.__tela_compra.retorna_informacoes_compra({"jogo": compra.jogo.nome, "usuario": compra.usuario.nome,
                                                            "data": compra.data})
-
 
     def listar_compras(self):
         for compra in self.__compras:
@@ -124,3 +122,7 @@ class ControladorCompra:
         for jogo in self.__jogos:
             jogos.append(jogo.nome)
         return jogos
+
+    @property
+    def compras(self):
+        return self.__compras

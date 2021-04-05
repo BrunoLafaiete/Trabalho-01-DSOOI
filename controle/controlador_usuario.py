@@ -9,6 +9,7 @@ class ControladorUsuario:
         self.__tela_usuario = TelaUsuario()
         self.__controlador_sistema = controlador_sistema
         self.__continua_nesse_menu = True
+        self.__compras = None
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastra_usuario, 2: self.verifica_usuario_existente, 3: self.informar_dados_usuario,
@@ -30,6 +31,12 @@ class ControladorUsuario:
             usuario = self.get_usuario_by_nome()
             for comunidade in usuario.comunidades:
                 comunidade.excluir_usuario(usuario)
+            for compra in usuario.compras:
+                compra.jogo.remover_compra(compra)
+            for compra in self.__compras:
+                if compra.usuario == usuario:
+                    self.__compras.remove(compra)
+
             self.__usuarios.remove(usuario)
 
     def lista_usuarios(self):
@@ -52,7 +59,9 @@ class ControladorUsuario:
         for usuario in self.__usuarios:
             if usuario.email == email_do_usuario:
                 self.__tela_usuario.devolve_dados_usuario({"email": usuario.email, "creditos": usuario.saldo,
-                                                           "nome": usuario.nome, "idade": usuario.idade})
+                                                           "nome": usuario.nome, "idade": usuario.idade,
+                                                           "comunidades": self.ler_comunidades(usuario),
+                                                           "jogos": self.ler_jogos(usuario)})
 
     def credita(self):
         dados_favorecido = self.__tela_usuario.tela_credita(self.__usuarios)
@@ -77,3 +86,17 @@ class ControladorUsuario:
     def usuarios(self):
         return self.__usuarios
 
+    def ler_jogos(self, usuario):
+        lista_jogos = []
+        for jogo in usuario.jogos:
+            lista_jogos.append(jogo.nome)
+        return lista_jogos
+
+    def ler_comunidades(self, usuario):
+        lista_comunidades = []
+        for comunidade in usuario.comunidades:
+            lista_comunidades.append(comunidade.nome)
+        return lista_comunidades
+
+    def gerar_compras(self, compras):
+        self.__compras = compras
