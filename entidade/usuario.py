@@ -33,22 +33,28 @@ class Usuario(Pessoa):
     def compras(self):
         return self.__compras
 
-    @property
-    def jogos(self):
-        return self.__jogos
-
-    @property
-    def comunidades(self):
-        return self.__comunidades
-
     def incluir_compra(self, compra):
         self.__compras.append(compra)
 
     def remover_compra(self, compra):
         self.__compras.remove(compra)
 
+    @property
+    def comunidades(self):
+        return self.__comunidades
+
     def incluir_comunidade(self, comunidade):
         self.__comunidades.append(comunidade)
 
     def excluir_comunidade(self, comunidade):
         self.__comunidades.remove(comunidade)
+
+    @property
+    def jogos(self):
+        return self.__jogos
+
+    def incluir_jogo(self, jogo):
+        self.__jogos.append(jogo)
+
+    def remover_jogo(self, jogo):
+        self.__jogos.remove(jogo)
