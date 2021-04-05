@@ -51,4 +51,4 @@ class Usuario(Pessoa):
         self.__comunidades.append(comunidade)
 
     def excluir_comunidade(self, comunidade):
-        self.__comunidades.append(comunidade)
+        self.__comunidades.remove(comunidade)
