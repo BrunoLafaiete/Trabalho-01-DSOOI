@@ -6,8 +6,8 @@ class Loja:
         for jogo in jogos:
             if jogo.genero not in self.__generos:
                 self.__generos.append(jogo.genero)
-            #if jogo.desenvolvedora.nome not in self.__desenvolvedoras:
-             #   self.__desenvolvedoras.append(jogo.desenvolvedora.nome)
+            if jogo.desenvolvedora.nome not in self.__desenvolvedoras:
+                self.__desenvolvedoras.append(jogo.desenvolvedora.nome)
 
     @property
     def jogos(self):
@@ -16,3 +16,7 @@ class Loja:
     @property
     def generos(self):
         return self.__generos
+
+    @property
+    def desenvolvedoras(self):
+        return self.__desenvolvedoras

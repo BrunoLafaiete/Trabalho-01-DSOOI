@@ -1,6 +1,3 @@
-from entidade.compra import Compra
-
-
 class Jogo:
 
     def __init__(self, nome: str, desenvolvedora, genero: str,
@@ -11,7 +8,6 @@ class Jogo:
         self.__faixa_etaria = faixa_etaria
         self.__preco = preco
         self.__compras = []
-
 
     @property
     def nome(self):
@@ -28,7 +24,6 @@ class Jogo:
     @desenvolvedora.setter
     def desenvolvedora(self, desenvolvedora):
         self.__desenvolvedora = desenvolvedora
-        #desenvolvedora.incluir_jogo(self)
 
     @property
     def genero(self):
@@ -54,8 +49,11 @@ class Jogo:
     def preco(self, preco: float):
         self.__preco = preco
 
-    def nova_compra(self, compra: Compra):
+    def incluir_compra(self, compra):
         self.__compras.append(compra)
+
+    def remover_compra(self, compra):
+        self.__compras.remove(compra)
 
     @property
     def compras(self):

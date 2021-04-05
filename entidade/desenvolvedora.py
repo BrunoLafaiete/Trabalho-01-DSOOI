@@ -21,4 +21,6 @@ class Desenvolvedora:
 
     def incluir_jogo(self, jogo: Jogo):
         self.__jogos.append(jogo)
-        jogo.desenvolvedora(self)
+
+    def excluir_jogo(self, jogo: Jogo):
+        self.__jogos.remove(jogo)
