@@ -31,8 +31,13 @@ class ControladorCompra:
         jogo = self.get_jogo()
         usuario = self.get_usuario()
         try:
-            if jogo.preco > usuario.saldo:
-                raise SaldoInsuficienteException
+            if usuario.cartao is not None:
+                comprar_por_cartao = self.__tela_compra.compra_cartao()
+            else:
+                comprar_por_cartao = False
+            if not comprar_por_cartao:
+                if jogo.preco > usuario.saldo:
+                    raise SaldoInsuficienteException
             if jogo.faixa_etaria > usuario.idade:
                 raise ValueError
             if jogo in usuario.jogos:

@@ -1,6 +1,7 @@
 from limite.tela_usuario import TelaUsuario
 from entidade.usuario import Usuario
 from excecoes.email_invalido_exception import EmailInvalidoException
+from controle.controlador_cartao_de_credito import ControladorCartaodeCredito
 
 
 class ControladorUsuario:
@@ -8,12 +9,14 @@ class ControladorUsuario:
         self.__usuarios = []
         self.__tela_usuario = TelaUsuario()
         self.__controlador_sistema = controlador_sistema
+        self.__controlador_cartao_de_credito = ControladorCartaodeCredito()
         self.__continua_nesse_menu = True
         self.__compras = None
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastra_usuario, 2: self.verifica_usuario_existente, 3: self.informar_dados_usuario,
-                        4: self.lista_usuarios, 5: self.credita, 0: self.retorna_menu_principal}
+                        4: self.lista_usuarios, 5: self.credita,6: self.cartao_de_credito,
+                        0: self.retorna_menu_principal}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
             lista_opcoes[self.__tela_usuario.tela_opcoes()]()
@@ -78,6 +81,17 @@ class ControladorUsuario:
                     usuario.senha = dados_usuario["senha"]
                     usuario.nome = dados_usuario["nome"]
                     usuario.idade = dados_usuario["idade"]
+
+    def cartao_de_credito(self):
+        if len(self.__usuarios) == 0:
+            self.__tela_usuario.mostra_mensagem_erro("Nao existem usuarios cadastrados!")
+        else:
+            usuario = self.get_usuario_by_nome()
+            if usuario.senha == self.__tela_usuario.verificar_senha():
+                self.__controlador_cartao_de_credito.definir_usuario(usuario)
+                self.__controlador_cartao_de_credito.abre_tela()
+            else:
+                self.__tela_usuario.mostra_mensagem_erro("Senha invalida!")
 
     def retorna_menu_principal(self):
         self.__continua_nesse_menu = False
