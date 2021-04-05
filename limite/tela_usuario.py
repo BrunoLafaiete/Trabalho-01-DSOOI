@@ -76,7 +76,6 @@ class TelaUsuario(TelaAbstrata):
         return {"email": email, "senha": senha, "nome": nome, "idade": idade}
 
     def verificar_email(self):
-        print("-----ALTERAR DADOS-----")
         while True:
             email = input("Digite seu email: ")
             try:
