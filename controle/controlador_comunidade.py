@@ -1,6 +1,7 @@
 from limite.tela_comunidade import TelaComunidade
 from entidade.comunidade import Comunidade
 from excecoes.usuario_invalido_exception import UsuarioInvalidoException
+from excecoes.nome_invalido_exception import NomeInvalidoException
 
 
 class ControladorComunidade:
