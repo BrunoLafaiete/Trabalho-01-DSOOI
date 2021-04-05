@@ -1,6 +1,8 @@
+from entidade.cartao_de_credito import CartaoDeCredito
 from entidade.pessoa import Pessoa
 
 class Usuario(Pessoa):
+
     def __init__(self, email: str, senha: str, nome: str, idade: int):
         super().__init__(email, senha, nome, idade)
         self.__email = email
@@ -11,6 +13,7 @@ class Usuario(Pessoa):
         self.__comunidades = []
         self.__jogos = []
         self.__compras = []
+        self.__cartao = None
 
     @property
     def saldo(self):
@@ -58,3 +61,11 @@ class Usuario(Pessoa):
 
     def remover_jogo(self, jogo):
         self.__jogos.remove(jogo)
+
+    @property
+    def cartao(self):
+        return self.__cartao
+
+    @cartao.setter
+    def cartao(self, cartao: CartaoDeCredito):
+        self.__cartao = cartao
