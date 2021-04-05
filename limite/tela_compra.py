@@ -1,5 +1,6 @@
 from limite.tela_abstrata import TelaAbstrata
 
+
 class TelaCompra(TelaAbstrata):
 
     def tela_opcoes(self):

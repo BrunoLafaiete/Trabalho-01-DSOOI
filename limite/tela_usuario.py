@@ -115,6 +115,8 @@ class TelaUsuario(TelaAbstrata):
         print("-----DADOS DESSE USUÁRIO-----")
         print("Email: ", dados_usuario["email"], "|", "Créditos: ", dados_usuario["creditos"], "|",
               "Nome: ", dados_usuario["nome"], "|", "Idade: ", dados_usuario["idade"])
+        print("Jogos: ", self.le_lista(dados_usuario["jogos"]))
+        print("Comunidades: ", self.le_lista(dados_usuario["comunidades"]))
         print()
 
     def verificar_senha(self):

@@ -50,10 +50,10 @@ class TelaJogo(TelaAbstrata):
 
         genero = input("Genero: ")
         while True:
-            faixa_etaria = input("Faixa etaria (0 ate 100): ")
+            faixa_etaria = input("Faixa etaria (0 ate 18): ")
             try:
                 faixa_etaria = int(faixa_etaria)
-                if faixa_etaria > 100 or faixa_etaria < 0:
+                if faixa_etaria > 18 or faixa_etaria < 0:
                     raise ValueError
                 break
             except ValueError:
@@ -104,10 +104,10 @@ class TelaJogo(TelaAbstrata):
                 print(e)
         genero = input("Genero: ")
         while True:
-            faixa_etaria = input("Faixa etaria (0 ate 100): ")
+            faixa_etaria = input("Faixa etaria (0 ate 18): ")
             try:
                 faixa_etaria = int(faixa_etaria)
-                if faixa_etaria > 100 or faixa_etaria < 0:
+                if faixa_etaria > 18 or faixa_etaria < 0:
                     raise ValueError
                 break
             except ValueError:

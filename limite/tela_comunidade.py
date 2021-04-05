@@ -16,8 +16,9 @@ class TelaComunidade(TelaAbstrata):
         print("4 - Buscar uma comunidade pelo nome")
         print("5 - Listar comunidades")
         print("6 - Altera comunidade")
+        print("7 - Excluir Comunidade")
         print("0 - Voltar ")
-        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4, 5])
+        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4, 5, 6, 7])
         print()
         return opcao_escolhida
 
@@ -105,12 +106,11 @@ class TelaComunidade(TelaAbstrata):
         senha = input("Digite a senha do usuario: ")
         return {"email": email_usuario, "senha": senha}
 
-    def pega_nome(self):
-        nome = input("Nome da comunidade: ")
-        return nome
-
     def remove_usuario(self):
         print("REMOVER USUARIO DA UMA COMUNIDADE")
 
     def add_usuario(self):
         print("ADICIONAR USUARIO NA UMA COMUNIDADE")
+
+    def remove_comunidade(self):
+        print("REMOVER COMUNIDADE")
