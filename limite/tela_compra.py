@@ -55,7 +55,7 @@ class TelaCompra(TelaAbstrata):
     def compra_cartao(self):
         while True:
             print("Usar o cartao para a compra?")
-            print("1- Sim")
+            print("1 - Sim")
             print("2 - Nao")
             resposta = self.le_num_int("Resposta: ", [1, 2])
             break
