@@ -27,6 +27,26 @@ class ControladorComunidade:
         comunidade = Comunidade(dados_comunidade["nome"], dados_comunidade["descricao"])
         self.__comunidades.append(comunidade)
 
+    def remove_comunidade(self):
+        if len(self.__comunidades) == 0:
+            self.__tela_comunidade.mostra_mensagem_erro("Não existem comunidades disponiveis!")
+        else:
+            comunidade = self.get_comunidade_by_nome()
+            for usuario in comunidade.usuarios:
+                usuario.excluir_comunidade(comunidade)
+            self.__comunidades.remove(comunidade)
+
+    def get_comunidade_by_nome(self):
+        while True:
+            try:
+                nome = self.__tela_comunidade.pega_nome()
+                for comunidade in self.__comunidades:
+                    if comunidade.nome == nome:
+                        return comunidade
+                raise NomeInvalidoException
+            except NomeInvalidoException:
+                self.__tela_comunidade.mostra_mensagem_erro("Insira um nome de comunidade valido")
+
     def adicionar_usuario_a_comunidade(self):
         if len(self.__comunidades) == 0:
             self.__tela_comunidade.mostra_mensagem_erro("Nao existem comunidades disponiveis!")
