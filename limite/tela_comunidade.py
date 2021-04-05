@@ -105,6 +105,10 @@ class TelaComunidade(TelaAbstrata):
         senha = input("Digite a senha do usuario: ")
         return {"email": email_usuario, "senha": senha}
 
+    def pega_nome(self):
+        nome = input("Nome da comunidade: ")
+        return nome
+
     def remove_usuario(self):
         print("REMOVER USUARIO DA UMA COMUNIDADE")
 
