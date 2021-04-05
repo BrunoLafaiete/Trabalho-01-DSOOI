@@ -17,8 +17,9 @@ class TelaUsuario(TelaAbstrata):
         print("3 - Pegar dados de um usuário")
         print("4 - Listar usuários")
         print("5 - Adicionar crédito")
+        print("6 - Cartao de crédito")
         print("0 - Voltar")
-        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4, 5])
+        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4, 5, 6])
         print()
         return opcao_escolhida
 

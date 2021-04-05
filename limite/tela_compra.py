@@ -51,3 +51,16 @@ class TelaCompra(TelaAbstrata):
         email_usuario = input("Digite o email do usuario: ")
         senha = input("Digite a senha do usuario: ")
         return {"email": email_usuario, "senha": senha}
+
+    def compra_cartao(self):
+        while True:
+            print("Usar o cartao para a compra?")
+            print("1- Sim")
+            print("2 - Nao")
+            resposta = self.le_num_int("Resposta: ", [1, 2])
+            break
+        if resposta == 1:
+            resposta = True
+        else:
+            resposta = False
+        return resposta
