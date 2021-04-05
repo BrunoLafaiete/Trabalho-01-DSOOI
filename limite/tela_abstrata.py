@@ -26,3 +26,6 @@ class TelaAbstrata(ABC):
             mensagem += str(item) + ", "
 
         return mensagem[:-2]
+
+    def mostra_mensagem_erro(self, mensagem):
+        print(mensagem)

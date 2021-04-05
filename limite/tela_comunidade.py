@@ -2,8 +2,7 @@ import string
 from limite.tela_abstrata import TelaAbstrata
 from excecoes.nome_invalido_exception import NomeInvalidoException
 from excecoes.descricao_invalida_exception import DescricaoInvalidaException
-from excecoes.jogo_invalido_exception import JogoInvalidoException
-
+from excecoes.comunidade_invalida_exception import ComunidadeInvalidaException
 
 
 class TelaComunidade(TelaAbstrata):
@@ -13,14 +12,17 @@ class TelaComunidade(TelaAbstrata):
         print("-----COMUNIDADES DA IsTeam's-----")
         print("1 - Criar uma nova comunidade")
         print("2 - Adicionar um usuário a uma Comunidade")
-        print("3 - Buscar uma comunidade pelo nome")
-        print("4 - Listar comunidades")
+        print("3 - Exluir usuario de uma Comunidade")
+        print("4 - Buscar uma comunidade pelo nome")
+        print("5 - Listar comunidades")
+        print("6 - Altera comunidade")
+        print("7 - Excluir Comunidade")
         print("0 - Voltar ")
-        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4])
+        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4, 5, 6, 7])
         print()
         return opcao_escolhida
 
-    def nova_comunidade(self, comunidades, jogos):
+    def nova_comunidade(self, comunidades):
         print("-----NOVA COMUNIDADE-----")
         while True:
             nome = input("Nome da comunidade: ")
@@ -43,16 +45,33 @@ class TelaComunidade(TelaAbstrata):
                 break
             except DescricaoInvalidaException as e:
                 print(e)
+
+        return {"nome": nome, "descricao": descricao}
+
+    def altera_comunidade(self, comunidades, nome_antigo):
         while True:
-            nome_jogo = input("Essa comunidade falará do jogo: ")
+            nome = input("Novo nome da comunidade: ")
             try:
-                if nome_jogo not in jogos:
-                    raise JogoInvalidoException
+                for comunidade in comunidades:
+                    if comunidade.nome == nome and comunidade.nome != nome_antigo:
+                        raise NomeInvalidoException
+                for digito in nome:
+                    if digito not in string.ascii_letters and digito not in [" ", "  "]:
+                        raise NomeInvalidoException
                 break
-            except JogoInvalidoException as e:
+            except NomeInvalidoException as e:
+                print(e)
+        while True:
+            descricao = input("Nova descrição: ")
+            try:
+                for digito in descricao:
+                    if digito not in string.ascii_letters and digito not in ["-", ",", ".", ";", ":", " ", "  "]:
+                        raise DescricaoInvalidaException
+                break
+            except DescricaoInvalidaException as e:
                 print(e)
 
-        return {"nome": nome, "descricao": descricao, "jogo": nome_jogo}
+        return {"nome": nome, "descricao": descricao}
 
     def mostra_comunidades(self, dados_comunidade):
         print("Comunidade ", dados_comunidade["nome"])
@@ -63,24 +82,35 @@ class TelaComunidade(TelaAbstrata):
     def print_comunidades_ativas(self):
         print("COMUNIDADES ATIVAS")
 
-    def busca_comunidade(self, comunidades):
+    def busca_comunidade(self, comunidades, nomes_comunidade):
         print("BUSCAR UMA COMUNIDADE")
         while True:
-            comunidade_a_buscar = input("Digite o nome da comunidade: ")
+            print("Comunidades ativas: " + self.le_lista(nomes_comunidade))
+            nome = input("Digite o nome da comunidade: ")
             try:
-                nomes = []
                 for comunidade in comunidades:
-                    nomes.append(comunidade.nome)
-                if comunidade_a_buscar not in nomes:
-                    raise NomeInvalidoException
-                break
-            except NomeInvalidoException as e:
+                    if comunidade.nome == nome:
+                        return comunidade
+                raise ComunidadeInvalidaException
+            except ComunidadeInvalidaException as e:
                 print(e)
-
-        return comunidade_a_buscar
 
     def retorna_comunidade(self, dados_comunidade):
         print("Comunidade ", dados_comunidade["nome"])
         print("Descrição: ", dados_comunidade["descricao"])
         print("Número de membros: ", dados_comunidade["numero_participantes"])
         print()
+
+    def encontrar_usuario(self):
+        email_usuario = input("Digite o email do usuario: ")
+        senha = input("Digite a senha do usuario: ")
+        return {"email": email_usuario, "senha": senha}
+
+    def remove_usuario(self):
+        print("REMOVER USUARIO DA UMA COMUNIDADE")
+
+    def add_usuario(self):
+        print("ADICIONAR USUARIO NA UMA COMUNIDADE")
+
+    def remove_comunidade(self):
+        print("REMOVER COMUNIDADE")

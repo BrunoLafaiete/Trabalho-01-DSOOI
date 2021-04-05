@@ -1,4 +1,6 @@
 from limite.tela_abstrata import TelaAbstrata
+from excecoes.nome_invalido_exception import NomeInvalidoException
+from excecoes.desenvolvedora_invalida_exception import DesenvolvedoraInvalidaException
 
 
 class TelaLoja(TelaAbstrata):
@@ -24,16 +26,26 @@ class TelaLoja(TelaAbstrata):
         print("Preço do jogo: ", dados_jogo["preco"], "\n")
 
     def conseguir_genero(self, generos_disponiveis):
-        print("Generos disponiveis:", self.le_lista(generos_disponiveis))
-        genero = input("Escolha um genero: ")
-        return genero
+        while True:
+            try:
+                print("Generos disponiveis:", self.le_lista(generos_disponiveis))
+                genero = input("Escolha um genero: ")
+                if genero in generos_disponiveis:
+                    return genero
+                raise NomeInvalidoException
+            except NomeInvalidoException:
+                print("Genero invalido! Selecione um genero valido")
 
     def conseguir_desenvolvedora(self, desenvolvedoras_disponiveis):
-        print("Desenvolvedoras disponiveis:", desenvolvedoras_disponiveis)
+        print("Desenvolvedoras disponiveis:", self.le_lista(desenvolvedoras_disponiveis))
         while True:
-            desenvolvedora = input("Escolha uma desenvolvedora valida: ")
-            if desenvolvedora in desenvolvedoras_disponiveis:
-                return desenvolvedora
+            try:
+                desenvolvedora = input("Escolha uma desenvolvedora valida: ")
+                if desenvolvedora in desenvolvedoras_disponiveis:
+                    return desenvolvedora
+                raise DesenvolvedoraInvalidaException
+            except DesenvolvedoraInvalidaException as e:
+                print(e)
 
 
     def conseguir_preco(self):
