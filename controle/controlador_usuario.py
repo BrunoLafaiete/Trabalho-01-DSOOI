@@ -1,5 +1,6 @@
 from limite.tela_usuario import TelaUsuario
 from entidade.usuario import Usuario
+from excecoes.email_invalido_exception import EmailInvalidoException
 
 
 class ControladorUsuario:
@@ -22,9 +23,29 @@ class ControladorUsuario:
                           dados_do_usuario["idade"])
         self.__usuarios.append(usuario)
 
+    def remove_usuario(self):
+        if len(self.__usuarios) == 0:
+            self.__tela_usuario.mostra_mensagem_erro("Nao existem usuarios cadastrados!")
+        else:
+            usuario = self.get_usuario_by_nome()
+            for comunidade in usuario.comunidades:
+                comunidade.excluir_usuario(usuario)
+            self.__usuarios.remove(usuario)
+
     def lista_usuarios(self):
         for usuario in self.__usuarios:
             self.__tela_usuario.listar_usuario({"email": usuario.email, "nome": usuario.nome, "idade": usuario.idade})
+
+    def get_usuario_by_nome(self):
+        while True:
+            try:
+                email = self.__tela_usuario.verificar_email()
+                for usuario in self.__usuarios:
+                    if usuario.email == email:
+                        return usuario
+                raise EmailInvalidoException
+            except EmailInvalidoException:
+                self.__tela_usuario.mostra_mensagem_erro("Insira um email valido!")
 
     def informar_dados_usuario(self):
         email_do_usuario = self.__tela_usuario.buscar_pelo_email(self.__usuarios)
