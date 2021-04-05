@@ -50,7 +50,7 @@ class TelaCartaoDeCredito(TelaAbstrata):
             except ValueError:
                 print("Numero invalido!")
         while True:
-            validade = input("Validade do cartao(formato mes/ano): ")
+            validade = input("Validade do cartao(formato mes/ano, MM/AAAA)): ")
             try:
                 mes, ano = map(int, validade.split("/"))
                 if mes > 12 or mes < 1 or ano < datetime.date.today().year:
