@@ -11,6 +11,11 @@ class ControladorJogo:
         self.__jogos = []
         self.__continua_nesse_menu = True
         self.__desenvolvedoras = None
+        self.__compras = None
+
+    def gerar_desenvolvedoras_e_compras(self, desenvolvedoras, compras):
+        self.__desenvolvedoras = desenvolvedoras
+        self.__compras = compras
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastra_jogo, 2: self.altera_jogo, 3: self.get_dados_jogo,
@@ -82,8 +87,13 @@ class ControladorJogo:
         else:
             jogo = self.get_jogo_by_nome()
             jogo.desenvolvedora.excluir_jogo(jogo)
+            for compra in jogo.compras:
+                compra.usuario.remover_compra(compra)
+                compra.usuario.remover_jogo(jogo)
+            for compra in self.__compras:
+                if compra.jogo == jogo:
+                    self.__compras.remove(compra)
             self.__jogos.remove(jogo)
-
 
     def voltar(self):
         self.__continua_nesse_menu = False
@@ -102,9 +112,6 @@ class ControladorJogo:
     @property
     def jogos(self):
         return self.__jogos
-
-    def gerar_desenvolvedoras(self, desenvolvedoras):
-        self.__desenvolvedoras = desenvolvedoras
 
     def nomes_jogo(self):
         jogos = []
