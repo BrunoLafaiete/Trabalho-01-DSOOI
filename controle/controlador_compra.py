@@ -43,7 +43,8 @@ class ControladorCompra:
             if jogo in usuario.jogos:
                 raise JahPossuiJogoException
             compra = Compra(jogo, usuario)
-            usuario.debite(jogo.preco)
+            if not comprar_por_cartao:
+                usuario.debite(jogo.preco)
             self.__compras.append(compra)
         except ValueError:
             self.__tela_compra.mostra_mensagem_erro("O Usuario nao possui a idade necessaria")
