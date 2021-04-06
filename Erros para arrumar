@@ -1,6 +1,6 @@
 Diminuir a responsabilidade das Telas
-Poder comprar o segundo jogo criado
-Buscar usuarios por nome
+Poder comprar o segundo jogo criado (looping infinito, a não ser que tente comprar o primeiro jogo novamente, que no caso é tratado pela exceção)
+Buscar usuarios por nome (looping infinito)
 
 
 Para o trabalho 2: implementar interface gráfica e persistência em arquivo
