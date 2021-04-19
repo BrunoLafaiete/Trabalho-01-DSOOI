@@ -27,5 +27,8 @@ class TelaAbstrata(ABC):
 
         return mensagem[:-2]
 
-    def mostra_mensagem_erro(self, mensagem):
-        print(mensagem)
+    '''def mostra_mensagem_erro(self, mensagem):
+        print(mensagem)'''
+    
+    def show_message(self, titulo: str, mensagem: str):
+        sg.Popup(titulo, mensagem)
