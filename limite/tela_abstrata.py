@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class TelaAbstrata(ABC):
 
     @abstractmethod
-    def tela_opcoes(self):
+    def tela_opcoes(self):  
         pass
    
     def le_num_int(self, mensagem: str = "", inteiros_validos: [] = None):
@@ -26,9 +26,6 @@ class TelaAbstrata(ABC):
             mensagem += str(item) + ", "
 
         return mensagem[:-2]
-
-    '''def mostra_mensagem_erro(self, mensagem):
-        print(mensagem)'''
     
     def show_message(self, titulo: str, mensagem: str):
         sg.Popup(titulo, mensagem)

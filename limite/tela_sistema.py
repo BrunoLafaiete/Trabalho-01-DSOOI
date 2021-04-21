@@ -4,28 +4,34 @@ import PySimpleGUI as sg
 class TelaSistema(TelaAbstrata):
     def __init__(self):
         self.__window = None
-        self.init_components()
-
-    def init_components(self):
-        layout = [[sg.Button('Acessar os Jogos', key=1)],
-                  [sg.Button('Acessar a Loja', key=2)],
-                  [sg.Button('Compra', key=3)],
-                  [sg.Button('Aba do Usuário', key=4)],
-                  [sg.Button('Comunidades', key=5)],
-                  [sg.Button('Desenvolvedoras', key=6)],
-                  [sg.Button('Finalizar Sistema', key=7)]]
-        self.__window = sg.Window("IsTeam's").Layout(layout)
 
     def mostra_menu(self):
-        self.init_components()
+        self.tela_opcoes()
         button, values = self.__window.Read()
         if button is None:
             button = 0
         return (button)
 
+    def tela_opcoes(self):
+        layout = [[sg.Button('Acessar os Jogos', key=1, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Acessar a Loja', key=2, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Compra', key=3, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Aba do Usuário', key=4, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Comunidades', key=5, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Desenvolvedoras', key=6, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Finalizar Sistema', key=7, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))]]
+        self.__window = sg.Window("IsTeam's", size=('1000', '520'), element_justification='center').Layout(layout)
+
     def close(self):
         self.__window.Close()
-
+'''
     def tela_inicial(self):
         print("----------------------------")
         print("----------IsTeam's----------")
@@ -56,3 +62,4 @@ class TelaSistema(TelaAbstrata):
                 print("Valor invalido: Digite um valor numerico inteiro valido")
                 if inteiros_validos:
                     print("Valores validos: ", inteiros_validos)
+'''
