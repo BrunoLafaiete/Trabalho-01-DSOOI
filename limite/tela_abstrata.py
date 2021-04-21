@@ -32,3 +32,7 @@ class TelaAbstrata(ABC):
     
     def show_message(self, titulo: str, mensagem: str):
         sg.Popup(titulo, mensagem)
+
+
+
+#sfasdgsadg dsafjsdnnnnsiajdf
