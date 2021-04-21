@@ -8,6 +8,8 @@ from controle.controlador_desenvolvedora import ControladorDesenvolvedora
 
 
 class ControladorSistema:
+    __instance = None
+
     def __init__(self):
         self.__controlador_usuario = ControladorUsuario(self)
         self.__controlador_comunidade = ControladorComunidade(self)
@@ -17,6 +19,11 @@ class ControladorSistema:
         self.__controlador_jogo = ControladorJogo(self)
         self.__tela_sistema = TelaSistema()
 
+    def __new__(cls):
+        if ControladorSistema.__instance is None:
+            ControladorSistema.__instance = object.__new__(cls)
+        return ControladorSistema.__instance
+
     def inicializa_sistema(self):
         self.abre_tela()
 
@@ -25,7 +32,7 @@ class ControladorSistema:
                         5: self.comunidade, 6: self.desenvolvedora, 7: self.encerra_sistema}
 
         while True:
-            opcao_escolhida = self.__tela_sistema.tela_inicial()
+            opcao_escolhida = self.__tela_sistema.mostra_menu()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()
 
