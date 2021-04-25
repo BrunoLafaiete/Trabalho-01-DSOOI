@@ -29,10 +29,10 @@ class ControladorSistema:
 
     def abre_tela(self):
         lista_opcoes = {1: self.jogo, 2: self.loja, 3: self.compra, 4: self.usuario,
-                        5: self.comunidade, 6: self.desenvolvedora, 7: self.encerra_sistema}
+                        5: self.comunidade, 6: self.desenvolvedora, 0: self.encerra_sistema}
 
         while True:
-            opcao_escolhida = self.__tela_sistema.mostra_menu()
+            opcao_escolhida = self.__tela_sistema.open()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()
 
@@ -47,7 +47,7 @@ class ControladorSistema:
 
     def loja(self):
         if len(self.__controlador_jogo.jogos) == 0:
-            self.__tela_sistema.ler_mensagem_erro("Nao existem jogos para gerar a loja! "
+            self.__tela_sistema.show_message("Aviso!", "Nao existem jogos para gerar a loja! "
                                                   "Por favor insira pelo menos um jogo")
         else:
             self.__controlador_loja.incluir_loja(self.__controlador_jogo.jogos)
@@ -55,8 +55,8 @@ class ControladorSistema:
 
     def compra(self):
         if len(self.__controlador_jogo.jogos) == 0 or len(self.__controlador_usuario.usuarios) == 0:
-            self.__tela_sistema.ler_mensagem_erro("Nao existem jogos ou usuarios suficientes para gerar as compras! "
-                                                  "Por favor insira pelo menos um de cada")
+            self.__tela_sistema.show_message("Aviso!", "Nao existem jogos ou usuarios suficientes para gerar as compras! "
+                                             "Por favor insira pelo menos um de cada")
         else:
             self.__controlador_compra.incluir_usuarios_e_jogos(self.__controlador_jogo.jogos,
                                                                self.__controlador_usuario.usuarios)

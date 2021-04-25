@@ -14,12 +14,12 @@ class ControladorUsuario:
         self.__compras = None
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastra_usuario, 2: self.verifica_usuario_existente, 3: self.informar_dados_usuario,
-                        4: self.lista_usuarios, 5: self.credita,6: self.cartao_de_credito,
-                        0: self.retorna_menu_principal}
+        lista_opcoes = {1: self.cadastra_usuario, 2: self.verifica_usuario_existente,
+                        3: self.informar_dados_usuario, 4: self.lista_usuarios,
+                        5: self.credita, 6: self.cartao_de_credito, 0: self.retorna_menu_principal}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
-            lista_opcoes[self.__tela_usuario.tela_opcoes()]()
+            lista_opcoes[self.__tela_usuario.open()]()
 
     def cadastra_usuario(self):
         dados_do_usuario = self.__tela_usuario.cadastrar_usuario(self.__usuarios)
@@ -29,7 +29,7 @@ class ControladorUsuario:
 
     def remove_usuario(self):
         if len(self.__usuarios) == 0:
-            self.__tela_usuario.mostra_mensagem_erro("Nao existem usuarios cadastrados!")
+            self.__tela_usuario.show_message("Aviso!", "Nao existem usuarios cadastrados!")
         else:
             usuario = self.get_usuario_by_nome()
             for comunidade in usuario.comunidades:
@@ -55,7 +55,7 @@ class ControladorUsuario:
                         return usuario
                 raise EmailInvalidoException
             except EmailInvalidoException:
-                self.__tela_usuario.mostra_mensagem_erro("Insira um email valido!")
+                self.__tela_usuario.show_message("Aviso!", "Insira um email valido!")
 
     def informar_dados_usuario(self):
         email_do_usuario = self.__tela_usuario.buscar_pelo_email(self.__usuarios)
@@ -84,14 +84,14 @@ class ControladorUsuario:
 
     def cartao_de_credito(self):
         if len(self.__usuarios) == 0:
-            self.__tela_usuario.mostra_mensagem_erro("Nao existem usuarios cadastrados!")
+            self.__tela_usuario.show_message("Aviso!", "Nao existem usuarios cadastrados!")
         else:
             usuario = self.get_usuario_by_nome()
             if usuario.senha == self.__tela_usuario.verificar_senha():
                 self.__controlador_cartao_de_credito.definir_usuario(usuario)
                 self.__controlador_cartao_de_credito.abre_tela()
             else:
-                self.__tela_usuario.mostra_mensagem_erro("Senha invalida!")
+                self.__tela_usuario.show_message("Aviso!", "Senha invalida!")
 
     def retorna_menu_principal(self):
         self.__continua_nesse_menu = False

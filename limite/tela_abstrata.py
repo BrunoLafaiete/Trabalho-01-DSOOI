@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import PySimpleGUI as sg
 
 
 class TelaAbstrata(ABC):
@@ -27,7 +28,7 @@ class TelaAbstrata(ABC):
 
         return mensagem[:-2]
     
-    def show_message(self, titulo: str, mensagem: str):
+    def show_message(self, titulo:str, mensagem: str):
         sg.Popup(titulo, mensagem)
 
 

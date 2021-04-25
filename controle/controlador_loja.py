@@ -15,7 +15,7 @@ class ControladorLoja:
                         4: self.buscar_por_faixa_etaria, 5: self.buscar_por_preco, 0: self.voltar}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
-            lista_opcoes[self.__tela.tela_opcoes()]()
+            lista_opcoes[self.__tela.open()]()
 
     def incluir_loja(self, jogos):
         self.__loja = Loja(jogos)

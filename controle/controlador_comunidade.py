@@ -22,7 +22,7 @@ class ControladorComunidade:
                         7: self.remove_comunidade, 0: self.retorna_menu_principal}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
-            lista_opcoes[self.__tela_comunidade.tela_opcoes()]()
+            lista_opcoes[self.__tela_comunidade.open()]()
 
     def cria_comunidade(self):
         dados_comunidade = self.__tela_comunidade.nova_comunidade(self.__comunidades)
@@ -31,7 +31,7 @@ class ControladorComunidade:
 
     def remove_comunidade(self):
         if len(self.__comunidades) == 0:
-            self.__tela_comunidade.mostra_mensagem_erro("Não existem comunidades disponiveis!")
+            self.__tela_comunidade.show_message("Aviso!", "Não existem comunidades disponiveis!")
         else:
             self.__tela_comunidade.remove_comunidade()
             comunidade = self.get_comunidade_by_nome()
@@ -41,9 +41,9 @@ class ControladorComunidade:
 
     def adicionar_usuario_a_comunidade(self):
         if len(self.__comunidades) == 0:
-            self.__tela_comunidade.mostra_mensagem_erro("Nao existem comunidades disponiveis!")
+            self.__tela_comunidade.show_message("Aviso!", "Nao existem comunidades disponiveis!")
         elif len(self.__usuarios) == 0:
-            self.__tela_comunidade.mostra_mensagem_erro("Nao existem usuarios disponiveis!")
+            self.__tela_comunidade.show_message("Aviso!", "Nao existem usuarios disponiveis!")
         else:
             self.__tela_comunidade.add_usuario()
             usuario = self.get_usuario()
@@ -52,13 +52,13 @@ class ControladorComunidade:
                 comunidade.incluir_usuario(usuario)
                 usuario.incluir_comunidade(comunidade)
             else:
-                self.__tela_comunidade.mostra_mensagem_erro("O usuario ja esta nesta comunidade")
+                self.__tela_comunidade.show_message("Aviso!", "O usuario ja esta nesta comunidade")
 
     def excluir_usuario_a_comunidade(self):
         if len(self.__comunidades) == 0:
-            self.__tela_comunidade.mostra_mensagem_erro("Nao existem comunidades disponiveis!")
+            self.__tela_comunidade.show_message("Aviso!", "Nao existem comunidades disponiveis!")
         elif len(self.__usuarios) == 0:
-            self.__tela_comunidade.mostra_mensagem_erro("Nao existem usuarios disponiveis!")
+            self.__tela_comunidade.show_message("Aviso!", "Nao existem usuarios disponiveis!")
         else:
             self.__tela_comunidade.remove_usuario()
             usuario = self.get_usuario()
@@ -67,11 +67,11 @@ class ControladorComunidade:
                 comunidade.excluir_usuario(usuario)
                 usuario.excluir_comunidade(comunidade)
             else:
-                self.__tela_comunidade.mostra_mensagem_erro("O usuario nao esta nesta comunidade")
+                self.__tela_comunidade.show_message("Aviso!", "O usuario nao esta nesta comunidade")
 
     def busca_comunidade_por_nome(self):
         if len(self.__comunidades) == 0:
-            self.__tela_comunidade.mostra_mensagem_erro("Nao existem comunidades disponiveis!")
+            self.__tela_comunidade.show_message("Aviso!", "Nao existem comunidades disponiveis!")
         else:
             comunidade = self.__tela_comunidade.busca_comunidade(self.__comunidades, self.nome_comunidades())
             self.__tela_comunidade.retorna_comunidade({"nome": comunidade.nome,
@@ -80,7 +80,7 @@ class ControladorComunidade:
 
     def lista_comunidades(self):
         if len(self.__comunidades) == 0:
-            self.__tela_comunidade.mostra_mensagem_erro("Nao existem comunidades disponiveis!")
+            self.__tela_comunidade.show_message("Aviso!", "Nao existem comunidades disponiveis!")
         else:
             self.__tela_comunidade.print_comunidades_ativas()
             for comunidade in self.__comunidades:
@@ -89,7 +89,7 @@ class ControladorComunidade:
 
     def altera_comunidade(self):
         if len(self.__comunidades) == 0:
-            self.__tela_comunidade.mostra_mensagem_erro("Nao existem comunidades disponiveis!")
+            self.__tela_comunidade.show_message("Aviso!", "Nao existem comunidades disponiveis!")
         else:
             comunidade = self.__tela_comunidade.busca_comunidade(self.__comunidades, self.nome_comunidades())
             dados_comunidade = self.__tela_comunidade.altera_comunidade(self.__comunidades, comunidade.nome)
@@ -124,7 +124,7 @@ class ControladorComunidade:
                         return usuario
                     raise UsuarioInvalidoException
             except UsuarioInvalidoException:
-                self.__tela_comunidade.mostra_mensagem_erro("Usuario ou Senha invalidos!")
+                self.__tela_comunidade.show_message("Aviso!", "Usuario ou Senha invalidos!")
 
 
     def emails_usuarios(self):

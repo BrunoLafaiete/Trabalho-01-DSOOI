@@ -23,13 +23,13 @@ class ControladorJogo:
         self.__continua_nesse_menu = True
 
         while self.__continua_nesse_menu:
-            lista_opcoes[self.__tela_jogo.tela_opcoes()]()
+            lista_opcoes[self.__tela_jogo.open()]()
 
     def cadastra_jogo(self):
         if len(self.__desenvolvedoras) == 0:
-            self.__tela_jogo.mostra_mensagem_erro("Não existem desenvolvedoras "
-                                                  "disponiveis! Por favor insira pelo "
-                                                  "menos uma antes de cadastrar um jogo ")
+            self.__tela_jogo.show_message("Aviso!", "Não existem desenvolvedoras "
+                                                    "disponiveis! Por favor insira pelo "
+                                                    "menos uma antes de cadastrar um jogo ")
         else:
             dados_jogo = self.__tela_jogo.cadastrar_jogo(self.__jogos, self.__desenvolvedoras)
             jogo = Jogo(dados_jogo["nome"], dados_jogo["desenvolvedora"], dados_jogo["genero"],
@@ -42,8 +42,8 @@ class ControladorJogo:
 
     def lista_jogos(self):
         if len(self.__jogos) == 0:
-            self.__tela_jogo.mostra_mensagem_erro("Não existem jogos disponiveis! "
-                                                  "Por favor insira pelo menos um")
+            self.__tela_jogo.show_message("Aviso!", "Não existem jogos disponiveis! "
+                                                    "Por favor insira pelo menos um")
         else:
             for jogo in self.__jogos:
                 self.__tela_jogo.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora.nome,
@@ -52,8 +52,8 @@ class ControladorJogo:
 
     def altera_jogo(self):
         if len(self.__jogos) == 0:
-            self.__tela_jogo.mostra_mensagem_erro("Não existem jogos disponiveis! "
-                                                  "Por favor insira pelo menos um")
+            self.__tela_jogo.show_message("Aviso!", "Não existem jogos disponiveis! "
+                                                    "Por favor insira pelo menos um")
         else:
             jogo = self.get_jogo_by_nome()
             nome_antigo = jogo.nome
@@ -72,8 +72,8 @@ class ControladorJogo:
 
     def get_dados_jogo(self):
         if len(self.__jogos) == 0:
-            self.__tela_jogo.mostra_mensagem_erro("Não existem jogos disponiveis! "
-                                                  "Por favor insira pelo menos um")
+            self.__tela_jogo.show_message("Aviso!", "Não existem jogos disponiveis! "
+                                                    "Por favor insira pelo menos um")
         else:
             jogo = self.get_jogo_by_nome()
             self.__tela_jogo.mostrar_jogo({"nome": jogo.nome, "desenvolvedora": jogo.desenvolvedora.nome,
@@ -82,8 +82,8 @@ class ControladorJogo:
 
     def remover_jogo(self):
         if len(self.__jogos) == 0:
-            self.__tela_jogo.mostra_mensagem_erro("Não existem jogos disponiveis! "
-                                                  "Por favor insira pelo menos um")
+            self.__tela_jogo.show_message("Aviso!", "Não existem jogos disponiveis! "
+                                                    "Por favor insira pelo menos um")
         else:
             jogo = self.get_jogo_by_nome()
             jogo.desenvolvedora.excluir_jogo(jogo)
@@ -107,7 +107,7 @@ class ControladorJogo:
                         return jogo
                 raise NomeInvalidoException
             except NomeInvalidoException:
-                self.__tela_jogo.mostra_mensagem_erro("Insira um jogo valido")
+                self.__tela_jogo.show_message("Erro", "Insira um jogo valido")
 
     @property
     def jogos(self):

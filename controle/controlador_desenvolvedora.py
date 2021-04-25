@@ -17,7 +17,7 @@ class ControladorDesenvolvedora:
         self.__continua_nesse_menu = True
 
         while self.__continua_nesse_menu:
-            lista_opcoes[self.__tela_desenvolvedora.tela_opcoes()]()
+            lista_opcoes[self.__tela_desenvolvedora.open()]()
 
     def cadastra_desenvolvedora(self):
         desenvolvedora = Desenvolvedora(self.__tela_desenvolvedora.cadastrar_desenvolvedora(self.__desenvolvedoras))
@@ -26,8 +26,8 @@ class ControladorDesenvolvedora:
 
     def alterar_desenvolvedora(self):
         if len(self.__desenvolvedoras) == 0:
-            self.__tela_desenvolvedora.mostra_mensagem_erro("Não existem desenvolvedoras disponiveis! "
-                                                            "Por favor insira pelo menos uma")
+            self.__tela_desenvolvedora.show_message("Aviso!", "Não existem desenvolvedoras disponiveis! "
+                                                              "Por favor insira pelo menos uma")
         else:
             desenvolvedora = self.get_desenvolvedora_by_nome()
             nome_antigo = desenvolvedora.nome
@@ -35,8 +35,8 @@ class ControladorDesenvolvedora:
 
     def lista_desenvolvedoras(self):
         if len(self.__desenvolvedoras) == 0:
-            self.__tela_desenvolvedora.mostra_mensagem_erro("Não existem desenvolvedoras disponiveis! "
-                                                            "Por favor insira pelo menos uma")
+            self.__tela_desenvolvedora.show_message("Aviso!", "Não existem desenvolvedoras disponiveis! "
+                                                              "Por favor insira pelo menos uma")
         else:
             for desenvolvedora in self.__desenvolvedoras:
                 self.__tela_desenvolvedora.mostrar_desenvolvedora({"nome": desenvolvedora.nome,
@@ -48,8 +48,8 @@ class ControladorDesenvolvedora:
 
     def get_dados_desenvolvedora(self):
         if len(self.__desenvolvedoras) == 0:
-            self.__tela_desenvolvedora.mostra_mensagem_erro("Não existem desenvolvedoras disponiveis! "
-                                                            "Por favor insira pelo menos uma")
+            self.__tela_desenvolvedora.show_message("Aviso!", "Não existem desenvolvedoras disponiveis! "
+                                                              "Por favor insira pelo menos uma")
         else:
             desenvolvedora = self.get_desenvolvedora_by_nome()
             self.__tela_desenvolvedora.mostrar_desenvolvedora({"nome": desenvolvedora.nome,
@@ -64,17 +64,17 @@ class ControladorDesenvolvedora:
                         return desenvolvedora
                 raise NomeInvalidoException
             except NomeInvalidoException as e:
-                self.__tela_desenvolvedora.mostra_mensagem_erro(e)
+                self.__tela_desenvolvedora.show_message("Erro!", e)
 
     def remover_desenvolvedora(self):
         if len(self.__desenvolvedoras) == 0:
-            self.__tela_desenvolvedora.mostra_mensagem_erro("Não existem desenvolvedoras disponiveis! "
-                                                            "Por favor insira pelo menos uma")
+            self.__tela_desenvolvedora.show_message("Aviso!", "Não existem desenvolvedoras disponiveis! "
+                                                              "Por favor insira pelo menos uma")
         else:
             desenvolvedora = self.get_desenvolvedora_by_nome()
             if len(desenvolvedora.jogos) > 0:
-                self.__tela_desenvolvedora.mostra_mensagem_erro("Essa desenvolvedora tem jogos ligados a ela! "
-                                                                "Por favor remova-os ou mude a desenvolvedora deles")
+                self.__tela_desenvolvedora.show_message("Aviso!", "Essa desenvolvedora tem jogos ligados a ela! "
+                                                                  "Por favor remova-os ou mude a desenvolvedora deles")
             else:
                 self.__desenvolvedoras.remove(desenvolvedora)
     @property

@@ -24,7 +24,7 @@ class ControladorCompra:
                         4: self.historico_compras_jogo, 5: self.listar_compras, 0: self.retorna_menu_principal}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
-            lista_opcoes[self.__tela_compra.tela_opcoes()]()
+            lista_opcoes[self.__tela_compra.open()]()
 
     def comprar_jogo(self):
         self.__tela_compra.compra_by_nome()
@@ -47,11 +47,11 @@ class ControladorCompra:
                 usuario.debite(jogo.preco)
             self.__compras.append(compra)
         except ValueError:
-            self.__tela_compra.mostra_mensagem_erro("O Usuario nao possui a idade necessaria")
+            self.__tela_compra.show_message("Aviso!", "O Usuario nao possui a idade necessaria")
         except SaldoInsuficienteException as e:
-            self.__tela_compra.mostra_mensagem_erro(e)
+            self.__tela_compra.show_message("Aviso!", e)
         except JahPossuiJogoException as e:
-            self.__tela_compra.mostra_mensagem_erro(e)
+            self.__tela_compra.show_message("Aviso!", e)
 
     def historico_compras_usuario(self):
         email = self.__tela_compra.historico_compras_usuario()
@@ -67,9 +67,9 @@ class ControladorCompra:
                     raise UsuarioInvalidoException
                 break
             except UsuarioInvalidoException as e:
-                self.__tela_compra.mostra_mensagem_erro(e)
+                self.__tela_compra.show_message("Aviso!", e)
 
-        self.__tela_compra.mostra_mensagem_erro("---Historico de Compras---")
+        self.__tela_compra.show_message("Histórico de compras", "---Historico de Compras---")
         for compra in usuario_para_checar.compras:
             self.__tela_compra.retorna_historico_compras({"nome": compra.jogo.nome, "preco": compra.jogo.preco,
                                                           "desenvolvedora": compra.jogo.desenvolvedora.nome,
@@ -86,7 +86,7 @@ class ControladorCompra:
 
     def historico_compras_jogo(self):
         jogo = self.get_jogo()
-        self.__tela_compra.mostra_mensagem_erro("---Historico de Compras---")
+        self.__tela_compra.show_message("Histórico de compras", "---Historico de Compras---")
         for compra in jogo.compras:
             self.__tela_compra.retorna_informacoes_compra({"jogo": compra.jogo.nome, "usuario": compra.usuario.nome,
                                                            "data": compra.data})
@@ -110,7 +110,7 @@ class ControladorCompra:
                         return usuario
                     raise UsuarioInvalidoException
             except UsuarioInvalidoException as e:
-                self.__tela_compra.mostra_mensagem_erro(e)
+                self.__tela_compra.show_message("Aviso!", e)
 
     def get_jogo(self):
         while True:
@@ -121,7 +121,7 @@ class ControladorCompra:
                         return jogo
                     raise NomeInvalidoException
             except NomeInvalidoException as e:
-                self.__tela_compra.mostra_mensagem_erro(e)
+                self.__tela_compra.show_message("Aviso!", e)
 
     def nome_jogos(self):
         jogos = []

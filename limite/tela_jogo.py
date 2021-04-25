@@ -1,11 +1,38 @@
 from limite.tela_abstrata import TelaAbstrata
 from excecoes.nome_invalido_exception import NomeInvalidoException
 from excecoes.desenvolvedora_invalida_exception import DesenvolvedoraInvalidaException
+import PySimpleGUI as sg
 
 
 class TelaJogo(TelaAbstrata):
+    def __init__(self):
+        self.__window = None
+
+    def open(self):
+        self.tela_opcoes()
+        button_key, values = self.__window.Read()
+        if button_key is None:
+            button_key = 0
+        return (button_key)
 
     def tela_opcoes(self):
+        sg.theme('Reddit')
+        layout = [[sg.Button('Cadastrar um novo jogo', key=1, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Alterar dados de um jogo', key=2, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Pegar dados de um jogo', key=3, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Listar jogos', key=4, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Remover um jogo', key=5, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
+                  [sg.Button('Voltar', key=0, size=('1000', '3'),
+                            font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))]]
+        self.__window = sg.Window("Jogos", size=('1000', '520'), element_justification='center',
+                                 finalize=True).Layout(layout)
+
+    '''def tela_opcoes(self):
         print("------JOGO------")
         print()
         print("1 - Cadastrar um novo jogo")
@@ -16,7 +43,7 @@ class TelaJogo(TelaAbstrata):
         print("0 - Voltar")
         print()
         opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4, 5])
-        return opcao_escolhida
+        return opcao_escolhida'''
 
     def cadastrar_jogo(self, jogos, desenvolvedoras):
         nomes_desenvolvedoras = []

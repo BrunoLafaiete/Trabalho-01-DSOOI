@@ -16,7 +16,7 @@ class ControladorCartaodeCredito:
                         4: self.retornar_cartao, 0: self.retorna}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
-            lista_opcoes[self.__tela_cartao_de_credito.tela_opcoes()]()
+            lista_opcoes[self.__tela_cartao_de_credito.open()]()
 
     def cadastrar_cartao(self):
         if self.__usuario.cartao is None:
@@ -26,7 +26,7 @@ class ControladorCartaodeCredito:
                                      dados_cartao["codigo seguranca"])
             self.__usuario.cartao = cartao
         else:
-            self.__tela_cartao_de_credito.mostra_mensagem_erro("O usuario jah possui um cartao cadastrado!")
+            self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario jah possui um cartao cadastrado!")
 
     def alterar_cartao(self):
         if self.__usuario.cartao is not None:
@@ -37,13 +37,13 @@ class ControladorCartaodeCredito:
             self.__usuario.cartao.validade = dados["validade"]
             self.__usuario.cartao.codigo_seguranca = dados["codigo seguranca"]
         else:
-            self.__tela_cartao_de_credito.mostra_mensagem_erro("O usuario nao possui um cartao cadastrado!")
+            self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario nao possui um cartao cadastrado!")
 
     def remover_cartao(self):
         if self.__usuario.cartao is not None:
             self.__usuario.cartao = None
         else:
-            self.__tela_cartao_de_credito.mostra_mensagem_erro("O usuario nao possui um cartao cadastrado!")
+            self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario nao possui um cartao cadastrado!")
 
     def retornar_cartao(self):
         if self.__usuario.cartao is not None:
@@ -53,7 +53,7 @@ class ControladorCartaodeCredito:
                                                          "validade": self.__usuario.cartao.validade,
                                                          "codigo": self.__usuario.cartao.codigo_seguranca})
         else:
-            self.__tela_cartao_de_credito.mostra_mensagem_erro("O usuario nao possui um cartao cadastrado!")
+            self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario nao possui um cartao cadastrado!")
 
     def retorna(self):
         self.__continua_nesse_menu = False
