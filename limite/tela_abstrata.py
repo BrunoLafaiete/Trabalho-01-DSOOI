@@ -7,6 +7,14 @@ class TelaAbstrata(ABC):
     @abstractmethod
     def tela_opcoes(self):  
         pass
+
+    @abstractmethod
+    def open(self):
+        pass
+        
+    @abstractmethod
+    def close(self):
+        pass
    
     def le_num_int(self, mensagem: str = "", inteiros_validos: [] = None):
         while True:

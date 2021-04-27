@@ -1,13 +1,18 @@
 from limite.tela_usuario import TelaUsuario
+from limite.tela_usuario_cadastro import TelaUsuarioCadastro
+from limite.tela_usuario_cadastro_dados import TelaUsuarioCadastroDados
 from entidade.usuario import Usuario
 from excecoes.email_invalido_exception import EmailInvalidoException
 from controle.controlador_cartao_de_credito import ControladorCartaodeCredito
+import string
 
 
 class ControladorUsuario:
     def __init__(self, controlador_sistema):
         self.__usuarios = []
         self.__tela_usuario = TelaUsuario()
+        self.__tela_usuario_cadastro = TelaUsuarioCadastro()
+        self.__tela_usuario_cadastro_dados = TelaUsuarioCadastroDados()
         self.__controlador_sistema = controlador_sistema
         self.__controlador_cartao_de_credito = ControladorCartaodeCredito()
         self.__continua_nesse_menu = True
@@ -22,10 +27,35 @@ class ControladorUsuario:
             lista_opcoes[self.__tela_usuario.open()]()
 
     def cadastra_usuario(self):
-        dados_do_usuario = self.__tela_usuario.cadastrar_usuario(self.__usuarios)
-        usuario = Usuario(dados_do_usuario["email"], dados_do_usuario["senha"], dados_do_usuario["nome"],
-                          dados_do_usuario["idade"])
-        self.__usuarios.append(usuario)
+        while True:
+            botao_clickado, dados = self.__tela_usuario_cadastro.open()
+            try:
+                for usuario in self.usuarios:
+                if usuario.email == dados['email']:
+                    raise EmailInvalidoException
+                if "@" not in dados['email']:
+                    raise EmailInvalidoException
+                else:
+                    entrada = dados['email'].split("@")
+                    if entrada[1] != "gmail.com":
+                        raise EmailInvalidoException
+                break
+            except EmailInvalidoException as e:
+                self.__tela_usuario_cadastro.show_message('Erro!', 'Digite um email válido!')
+            
+        while True:
+            botao_clickado, dados = self.__tela_usuario_cadastro_dados.open()
+            try:
+                for digito in dados['senha']:
+                    if digito not in string.printable:
+                        raise SenhaInvalidaException
+                break
+            except SenhaInvalidaException as e:
+                print(e)
+                print("Caracteres validos: ", string.printable)
+        #usuario = Usuario(dados_do_usuario["email"], dados_do_usuario["senha"], dados_do_usuario["nome"],
+                          #dados_do_usuario["idade"])
+        #self.__usuarios.append(usuario)
 
     def remove_usuario(self):
         if len(self.__usuarios) == 0:

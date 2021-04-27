@@ -37,6 +37,8 @@ class TelaUsuario(TelaAbstrata):
         self.__window = sg.Window("Aba do Usuário", size=('1000', '520'), element_justification='center',
                                  finalize=True).Layout(layout)
 
+    def close(self):
+        self.__window.Close()
 
     '''def tela_opcoes(self):
         print()
