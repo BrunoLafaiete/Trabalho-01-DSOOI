@@ -8,7 +8,7 @@ import PySimpleGUI as sg
 
 
 class TelaUsuarioCadastroDados(TelaAbstrata):
-     def __init__(self):
+    def __init__(self):
         self.__window = None
 
     def open(self):
@@ -20,15 +20,14 @@ class TelaUsuarioCadastroDados(TelaAbstrata):
 
     def tela_opcoes(self):
         sg.theme('Reddit')
-        layout = [[sg.Text('Por favor digite uma senha', font=('Helvetica', 12))],
+        layout = [[sg.Text('Por favor digite uma senha', font=('Helvetica', 10))],
                   [sg.Text('Senha: ', key='senha', size=('17', '1'),
-                          font=('Helvetica', 12)), sg.InputText()],
-                  [sg.Text('Nome completo: ', key='nome' ,size('17', '1'),
-                          font=('Helvetica', 12)), sg.InputText()],
-                  [sg.Text('Idade : ', key='idade' ,size('17', '1'),
-                          font=('Helvetica', 12)), sg.InputText()],
-                  [sg.Button('Voltar', key='voltar', font=('Helvetica', 12),
-                            border_width='0', focus=(True, 'invisible'))]]
+                          font=('Helvetica', 10)), sg.InputText()],
+                  [sg.Text('Nome completo: ', key='nome', size=('17', '1'),
+                          font=('Helvetica', 10)), sg.InputText()],
+                  [sg.Text('Idade : ', key='idade', size=('17', '1'),
+                          font=('Helvetica', 10)), sg.InputText()],
+                  [sg.Submit(font=('Helvetica', 10)), sg.Cancel('Helvetica', 10)]]
         self.__window = sg.Window("Cadastrar um usuário", element_justification='center',
                                  finalize=True).Layout(layout)
 

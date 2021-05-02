@@ -20,11 +20,10 @@ class TelaUsuarioCadastro(TelaAbstrata):
 
     def tela_opcoes(self):
         sg.theme('Reddit')
-        layout = [[sg.Text('Por favor digite um email', font=('Helvetica', 12))],
+        layout = [[sg.Text('Por favor digite um email', font=('Helvetica', 10))],
                   [sg.Text('Email: ', key='email', size=('17', '1'),
-                          font=('Helvetica', 12)), sg.InputText()],
-                  [sg.Button('Voltar', key='voltar', font=('Helvetica', 12),
-                            border_width='0', focus=(True, 'invisible'))]]
+                          font=('Helvetica', 10)), sg.InputText()],
+                  [sg.Submit(font=('Helvetica', 10)), sg.Cancel(font=('Helvetica', 10))]]
         self.__window = sg.Window("Cadastrar um usuário", element_justification='center',
                                  finalize=True).Layout(layout)
 

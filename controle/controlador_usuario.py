@@ -28,31 +28,46 @@ class ControladorUsuario:
 
     def cadastra_usuario(self):
         while True:
-            botao_clickado, dados = self.__tela_usuario_cadastro.open()
+            botao_clickado, email = self.__tela_usuario_cadastro.open()
             try:
-                for usuario in self.usuarios:
-                if usuario.email == dados['email']:
-                    raise EmailInvalidoException
-                if "@" not in dados['email']:
-                    raise EmailInvalidoException
-                else:
-                    entrada = dados['email'].split("@")
-                    if entrada[1] != "gmail.com":
+                for user in self.usuarios:
+                    if user.email == email['email']:
                         raise EmailInvalidoException
+                    elif "@" not in email['email']:
+                        raise EmailInvalidoException
+                    else:
+                        entrada = email['email'].split("@")
+                        if entrada[1] != "gmail.com":
+                            raise EmailInvalidoException
                 break
             except EmailInvalidoException as e:
-                self.__tela_usuario_cadastro.show_message('Erro!', 'Digite um email válido!')
-            
+                self.__tela_usuario_cadastro_dados.show_message('Erro!', e)
+        print(botao_clickado, email)
+
         while True:
-            botao_clickado, dados = self.__tela_usuario_cadastro_dados.open()
+            botao_clickado, dados_complementares = self.__tela_usuario_cadastro_dados.open()
             try:
-                for digito in dados['senha']:
+                for digito in dados_complementares['senha']:
                     if digito not in string.printable:
                         raise SenhaInvalidaException
                 break
+                for caracter in dados_complementares['nome']:
+                    if caracter not in string.ascii_letters and caracter not in [" ", "  "]:
+                        raise NomeInvalidoException
+                break
+                if 0 > int(dados_complementares['idade']) or 130 > int(dados_complementares['idade']):
+                    raise IdadeInvalidaException
             except SenhaInvalidaException as e:
-                print(e)
-                print("Caracteres validos: ", string.printable)
+                self.__tela_usuario_cadastro_dados.show_message('Erro!', e)
+            except NomeInvalidoException as e:
+                self.__tela_usuario_cadastro_dados.show_message('Erro!', e)
+            except IdadeInvalidaException as e:
+                self.__tela_usuario_cadastro_dados.show_message('Erro!', e)
+  
+        usuario = Usuario(email['email'], dados_complementares['senha'],
+                          dados_complementares['nome'], dados_complementares['idade'])
+        self.__usuarios.append(usuario)
+                
         #usuario = Usuario(dados_do_usuario["email"], dados_do_usuario["senha"], dados_do_usuario["nome"],
                           #dados_do_usuario["idade"])
         #self.__usuarios.append(usuario)
