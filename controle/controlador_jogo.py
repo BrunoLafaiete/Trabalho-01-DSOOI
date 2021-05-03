@@ -4,6 +4,8 @@ from limite.tela_jogo_nome import TelaJogoNome
 from limite.tela_jogo_cadastro import TelaJogoCadastro
 from limite.tela_jogo_alterar import TelaJogoAlterar
 from excecoes.nome_invalido_exception import NomeInvalidoException
+from excecoes.genero_invalido_exception import GeneroInvalidoException
+from excecoes.desenvolvedora_invalida_exception import DesenvolvedoraInvalidaException
 
 
 class ControladorJogo:
@@ -42,31 +44,40 @@ class ControladorJogo:
                 dados_jogo = self.__tela_jogo_cadastro.open(self.nomes_desenvolvedoras())
                 if dados_jogo[0] == 'Submit':
                     try:
+                        if len(dados_jogo[1][0]) == 0:
+                            raise NomeInvalidoException
+                        if len(dados_jogo[1][2]) == 0:
+                            raise GeneroInvalidoException
+                        if len(dados_jogo[1][1]) == 0 or dados_jogo[1][1] not in self.nomes_desenvolvedoras():
+                            raise DesenvolvedoraInvalidaException
                         for jogo in self.__jogos:
                             if jogo.nome == dados_jogo[1][0]:
                                 raise NomeInvalidoException
                         if float(dados_jogo[1][4]) > 1500 or float(dados_jogo[1][4]) < 0:
                             raise ValueError
+                        for desenvolvedora in self.__desenvolvedoras:
+                            if desenvolvedora.nome == dados_jogo[1][1]:
+                                jogo = Jogo(dados_jogo[1][0], desenvolvedora, dados_jogo[1][2], int(dados_jogo[1][3]),
+                                            float(dados_jogo[1][4]))
+                                self.__jogos.append(jogo)
+                                desenvolvedora.incluir_jogo(jogo)
+                                self.__tela_jogo_cadastro.close()
+                                break
                         break
                     except NomeInvalidoException as e:
                         self.__tela_jogo.show_message("Aviso", str(e))
 
                     except ValueError:
                         self.__tela_jogo.show_message("Aviso", "Valor invalido para o preço! (0 ate 1500)")
+
+                    except GeneroInvalidoException as e:
+                        self.__tela_jogo.show_message("Aviso", str(e))
+
+                    except DesenvolvedoraInvalidaException as e:
+                        self.__tela_jogo.show_message("Aviso", str(e))
                 else:
                     self.__tela_jogo.show_message("Aviso", "Processo Cancelado")
                     break
-
-            des = None
-            for desenvolvedora in self.__desenvolvedoras:
-                if desenvolvedora.nome == dados_jogo[1][1]:
-                    des = desenvolvedora
-            jogo = Jogo(dados_jogo[1][0], des, dados_jogo[1][2], dados_jogo[1][3], dados_jogo[1][4])
-            self.__jogos.append(jogo)
-            for desenvolvedora in self.__desenvolvedoras:
-                if desenvolvedora.nome == dados_jogo[1][1]:
-                    desenvolvedora.incluir_jogo(jogo)
-            self.__tela_jogo_cadastro.close()
 
     def lista_jogos(self):
         if len(self.__jogos) == 0:

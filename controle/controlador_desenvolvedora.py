@@ -30,10 +30,12 @@ class ControladorDesenvolvedora:
         while True:
             try:
                 nome = self.__tela_desenvolvedora_cadastro.open()
-                for desenvolvedora in self.__desenvolvedoras:
-                    if desenvolvedora.nome == nome[1][0]:
-                        raise NomeInvalidoException
                 if nome[0] == 'Submit':
+                    if len(nome[1][0]) == 0:
+                        raise NomeInvalidoException
+                    for desenvolvedora in self.__desenvolvedoras:
+                        if desenvolvedora.nome == nome[1][0]:
+                            raise NomeInvalidoException
                     desenvolvedora = Desenvolvedora(nome[1][0])
                     self.__desenvolvedoras.append(desenvolvedora)
                     self.__tela_desenvolvedora_cadastro.close()
@@ -93,8 +95,9 @@ class ControladorDesenvolvedora:
                                                               "Por favor insira pelo menos uma")
         else:
             desenvolvedora = self.get_desenvolvedora_by_nome()
-            self.__tela_desenvolvedora.show_message("Dados", (desenvolvedora.nome + "\nJogos: " +
-                                                    " ,".join(self.jogos_desenvolvedora_str(desenvolvedora)) + "\n"))
+            if desenvolvedora is not None:
+                self.__tela_desenvolvedora.show_message("Dados", (desenvolvedora.nome + "\nJogos: " +
+                                                        " ,".join(self.jogos_desenvolvedora_str(desenvolvedora)) + "\n"))
 
     def get_desenvolvedora_by_nome(self):
         while True:
