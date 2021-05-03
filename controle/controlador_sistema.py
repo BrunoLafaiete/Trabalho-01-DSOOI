@@ -34,6 +34,7 @@ class ControladorSistema:
         while True:
             opcao_escolhida = self.__tela_sistema.open()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
+            self.__tela_sistema.close()
             funcao_escolhida()
 
     def usuario(self):
