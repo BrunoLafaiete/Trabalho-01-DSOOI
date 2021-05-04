@@ -2,7 +2,7 @@ from limite.tela_abstrata import TelaAbstrata
 import PySimpleGUI as sg
 
 
-class TelaUsuarioCadastro(TelaAbstrata):
+class TelaUsuarioAlteraDados(TelaAbstrata):
     def __init__(self):
         self.__window = None
 

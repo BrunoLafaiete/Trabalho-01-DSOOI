@@ -40,73 +40,7 @@ class TelaUsuario(TelaAbstrata):
     def close(self):
         self.__window.Close()
 
-    '''def tela_opcoes(self):
-        print()
-        print("-----USUÁRIO-----")
-        print("1 - Cadastrar um usuário")
-        print("2 - Alterar dados do usuário")
-        print("3 - Pegar dados de um usuário")
-        print("4 - Listar usuários")
-        print("5 - Adicionar crédito")
-        print("6 - Cartao de crédito")
-        print("0 - Voltar")
-        opcao_escolhida = self.le_num_int("Escolha uma opção: ", [0, 1, 2, 3, 4, 5, 6])
-        print()
-        return opcao_escolhida
-
-    def cadastrar_usuario(self, usuarios):
-        print("-----CADASTRAR UM USUÁRIO-----")
-        while True:
-            email = input("Email: ")
-            try:
-                for usuario in usuarios:
-                    if usuario.email == email:
-                        raise EmailInvalidoException
-                if "@" not in email:
-                    raise EmailInvalidoException
-                else:
-                    entrada = email.split("@")
-                    if entrada[1] != "gmail.com":
-                        raise EmailInvalidoException
-                break
-            except EmailInvalidoException as e:
-                print(e)
-
-        while True:
-            senha = input("Senha: ")
-            try:
-                for digito in senha:
-                    if digito not in string.printable:
-                        raise SenhaInvalidaException
-                break
-            except SenhaInvalidaException as e:
-                print(e)
-                print("Caracteres validos: ", string.printable)
-
-        while True:
-            nome = input("Nome Completo: ")
-            try:
-                for digito in nome:
-                    if digito not in string.ascii_letters and digito not in [" ", "  "]:
-                        raise NomeInvalidoException
-                break
-            except NomeInvalidoException as e:
-                print(e)
-
-        while True:
-            idade = input("Idade: ")
-            try:
-                idade = int(idade)
-                if 0 > idade or 130 < idade:
-                    raise IdadeInvalidaException
-                break
-            except IdadeInvalidaException as e:
-                print(e)
-            except ValueError:
-                print("Insira um valor valido para a idade!")
-
-        return {"email": email, "senha": senha, "nome": nome, "idade": idade}
-
+    '''
     def verificar_email(self):
         while True:
             email = input("Digite seu email: ")
