@@ -62,7 +62,7 @@ class ControladorUsuario:
                 except IdadeInvalidaException as e:
                     self.__tela_usuario.show_message('Erro!', str(e))
             else:
-                self.__tela_usuario.show_message('Aviso', 'Processo cancelado')
+                self.__tela_usuario.show_message("Aviso", "Processo Cancelado")
                 break
         usuario = Usuario(dados_usuario[1]['email'], dados_usuario[1]['senha'],
                           dados_usuario[1]['nome'], dados_usuario[1]['idade'])
@@ -70,40 +70,39 @@ class ControladorUsuario:
         self.__tela_usuario.close()
 
     def alterar_dados_usuario(self):
-        while True:
-            dados = self.__tela_usuario_verificador.open('apenas_email')
-            email_before_change = dados[1]['email']
-            if dados[0] == 'Enviar':
-                try:
-                    if email_before_change not in self.lista_emails_usuarios:
-                        raise EmailInvalidoException
-                    break
-                except EmailInvalidoException as e:
-                    self.__tela_usuario.show_message('Erro!', str(e))
-                    break
-                
-                novos_dados = self.__tela_usuario_cadastro.open()
-                if novos_dados[0] == 'Enviar':
+        if len(self.__usuarios) == 0:
+            self.__tela_usuario.show_message("Aviso!", "Não existem usuarios "
+                                                       "cadastrados! Por favor cadastre pelo "
+                                                       "menos um antes de alterar dados ")
+        else:
+            usuario = self.get_usuario_by_email()
+            if usuario is not None:
+                email_antigo = usuario.email
+                while True:
                     try:
-                        for user in self.usuarios:
-                            if user.email == novos_dados[1]['email']:
+                        dados_usuario = self.__tela_usuario_cadastro.open()
+                        if dados_usuario is not None:
+                            if dados_usuario[1]['email'] in self.lista_emails_usuarios and dados_usuario[1]['email'] != email_antigo:
                                 raise EmailInvalidoException
-                        if "@" not in novos_dados[1]['email']:
-                            raise EmailInvalidoException
+                            if "@" not in dados_usuario[1]['email']:
+                                raise EmailInvalidoException
+                            else:
+                                entrada = dados_usuario[1]['email'].split("@")
+                                if entrada[1] != "gmail.com":
+                                    raise EmailInvalidoException
+                            for digito in dados_usuario[1]['senha']:
+                                if digito not in string.printable:
+                                    raise SenhaInvalidaException
+                            for letra in dados_usuario[1]['nome']:
+                                if letra not in string.ascii_letters and letra not in [" ", "  "]:
+                                    raise NomeInvalidoException
+                            idade = int(dados_usuario[1]['idade'])
+                            if 0 > idade or 130 < idade:
+                                raise IdadeInvalidaException
+                            break
                         else:
-                            entrada = novos_dados[1]['email'].split("@")
-                            if entrada[1] != "gmail.com":
-                                raise EmailInvalidoException
-                        for digito in novos_dados[1]['senha']:
-                            if digito not in string.printable:
-                                raise SenhaInvalidaException
-                        for letra in novos_dados[1]['nome']:
-                            if letra not in string.ascii_letters and letra not in [" ", "  "]:
-                                raise NomeInvalidoException
-                        idade = int(novos_dados[1]['idade'])
-                        if 0 > idade or 130 < idade:
-                            raise IdadeInvalidaException
-                        break
+                            self.__tela_usuario.show_message("Aviso", "Processo Cancelado")
+                            break
                     except EmailInvalidoException as e:
                         self.__tela_usuario.show_message('Erro!', str(e))
                     except SenhaInvalidaException as e:
@@ -113,26 +112,16 @@ class ControladorUsuario:
                     except IdadeInvalidaException as e:
                         self.__tela_usuario.show_message('Erro!', str(e))
                 
-                    usuario = Usuario(dados_usuario[1]['email'], dados_usuario[1]['senha'],
-                                      dados_usuario[1]['nome'], dados_usuario[1]['idade'])
-                    self.__usuarios.append(usuario)
-                    self.remove_usuario()
-                    self.__tela_usuario_cadastro.close()
+                if dados_usuario is not None:
+                    usuario.email = dados_usuario[1]['email']
+                    usuario.senha = dados_usuario[1]['senha']
+                    usuario.nome = dados_usuario[1]['nome']
+                    usuario.idade = dados_usuario[1]['idade']
 
-
-    def remove_usuario(self):
+    def remove_usuario(self, usuario: Usuario):
         if len(self.__usuarios) == 0:
             self.__tela_usuario.show_message("Aviso!", "Nao existem usuarios cadastrados!")
         else:
-            usuario = self.get_usuario_by_nome()
-            for comunidade in usuario.comunidades:
-                comunidade.excluir_usuario(usuario)
-            for compra in usuario.compras:
-                compra.jogo.remover_compra(compra)
-            for compra in self.__compras:
-                if compra.usuario == usuario:
-                    self.__compras.remove(compra)
-
             self.__usuarios.remove(usuario)
 
     def lista_usuarios(self):
@@ -142,31 +131,46 @@ class ControladorUsuario:
         else:
             lista_usuarios = list()
             for usuario in self.__usuarios:
-                lista_usuarios.append("\nNome do usuario: " + usuario.nome + "\nEmail do usuario: "
+                lista_usuarios.append("\nTotal de usuários cadastrados: " + str(len(self.__usuarios))
+                                      + "\nNome do usuario: " + usuario.nome + "\nEmail do usuario: "
                                       + usuario.email + "\nIdade do usuario: " + usuario.idade)
             self.__tela_usuario.show_message("Listagem de Usuarios", "\n".join(lista_usuarios))
 
     def get_usuario_by_email(self):
-        while True:
-            dados = self.__tela_usuario_verificador('apenas_email')
-            try:
-                if dados[1]['email'] not in lista_emails_usuarios:
-                    raise EmailInvalidoException
-                break
-            except EmailInvalidoException as e:
-                self.__tela_usuario.show_message("Aviso!", str(e))
-            for usuario in self.__usuarios:
-                if usuario.email == dados[1]['email']:
-                    return usuario
+        if len(self.__usuarios) == 0:
+            self.__tela_usuario.show_message("Aviso!", "Não existem usuarios cadastrados! "
+                                                    "Por favor cadastre pelo menos um")
+        else:
+            while True:
+                try:
+                    email = self.__tela_usuario_verificador.open()
+                    if email[0] == 'Enviar':
+                        for usuario in self.__usuarios:
+                            if usuario.email == email[1]['email']:
+                                self.__tela_usuario_verificador.close()
+                                return usuario
+                        raise NomeInvalidoException
+                    else:
+                        self.__tela_usuario_verificador.close()
+                        return None
+                except NomeInvalidoException as e:
+                    self.__tela_usuario_verificador.show_message('Aviso', str(e))
+                    self.__tela_usuario_verificador.close()
 
     def informar_dados_usuario(self):
-        email_do_usuario = self.__tela_usuario.buscar_pelo_email(self.__usuarios)
-        for usuario in self.__usuarios:
-            if usuario.email == email_do_usuario:
-                self.__tela_usuario.devolve_dados_usuario({"email": usuario.email, "creditos": usuario.saldo,
-                                                           "nome": usuario.nome, "idade": usuario.idade,
-                                                           "comunidades": self.ler_comunidades(usuario),
-                                                           "jogos": self.ler_jogos(usuario)})
+        if len(self.__usuarios) == 0:
+            self.__tela_usuario.show_message("Aviso!", "Não existem usuarios cadastrados! "
+                                                    "Por favor cadastre pelo menos um")
+        else:
+            email = self.__tela_usuario_verificador.open()
+            if email[0] == 'Enviar':
+                for usuario in self.__usuarios:
+                    if usuario.email == email[1]['email']:
+                        self.__tela_usuario.show_message(usuario.nome.upper(), "Nome do Usuario: " + usuario.nome
+                                                                               + "\nEmail do usuario: " + usuario.email +
+                                                                               "\nIdade do usuario: " + usuario.idade)
+            else:
+                self.__tela_usuario_verificador.show_message("Aviso", "Processo Cancelado")
 
     def credita(self):
         dados_favorecido = self.__tela_usuario.tela_credita(self.__usuarios)

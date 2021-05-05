@@ -6,7 +6,7 @@ class TelaUsuarioVerificador(TelaAbstrata):
     def __init__(self):
         self.__window = None
 
-    def open(self, comando: str):
+    def open(self):
         self.tela_opcoes()
         button_key, values = self.__window.Read()
         if button_key is None:
@@ -15,7 +15,7 @@ class TelaUsuarioVerificador(TelaAbstrata):
 
     def tela_opcoes(self):
         sg.theme('Reddit')
-        layout = [[sg.Text('Por favor digite os dados solicitados', font=('Helvetica', 10))],
+        layout = [[sg.Text('Por favor digite um email de usuario', font=('Helvetica', 10))],
                   [sg.Text('Email: ', size=('17', '1'), font=('Helvetica', 10)),
                    sg.InputText(key='email')],
                   [sg.Button('Enviar', font=('Helvetica', 10)), sg.Button('Cancelar', font=('Helvetica', 10))]]
