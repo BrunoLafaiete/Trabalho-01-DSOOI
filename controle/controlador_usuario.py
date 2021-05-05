@@ -1,12 +1,14 @@
 from limite.tela_usuario import TelaUsuario
 from limite.tela_usuario_cadastro import TelaUsuarioCadastro
 from limite.tela_usuario_verificador import TelaUsuarioVerificador
+from limite.tela_usuario_credita import TelaUsuarioCredita
 from entidade.usuario import Usuario
 from controle.controlador_cartao_de_credito import ControladorCartaodeCredito
 from excecoes.email_invalido_exception import EmailInvalidoException
 from excecoes.senha_invalida_exception import SenhaInvalidaException
 from excecoes.nome_invalido_exception import NomeInvalidoException
-from excecoes.idade_invalida_exception import IdadeInvalidaException 
+from excecoes.idade_invalida_exception import IdadeInvalidaException
+from excecoes.credito_invalido_exception import CreditoInvalidoException
 import string
 
 
@@ -16,6 +18,7 @@ class ControladorUsuario:
         self.__tela_usuario = TelaUsuario()
         self.__tela_usuario_cadastro = TelaUsuarioCadastro()
         self.__tela_usuario_verificador = TelaUsuarioVerificador()
+        self.__tela_usuario_credita = TelaUsuarioCredita()
         self.__controlador_sistema = controlador_sistema
         self.__controlador_cartao_de_credito = ControladorCartaodeCredito()
         self.__continua_nesse_menu = True
@@ -52,7 +55,12 @@ class ControladorUsuario:
                     idade = int(dados_usuario[1]['idade'])
                     if 0 > idade or 130 < idade:
                         raise IdadeInvalidaException
+                    usuario = Usuario(dados_usuario[1]['email'], dados_usuario[1]['senha'],
+                                      dados_usuario[1]['nome'], dados_usuario[1]['idade'])
+                    self.__usuarios.append(usuario)
+                    self.__tela_usuario.close()
                     break
+
                 except EmailInvalidoException as e:
                     self.__tela_usuario.show_message('Erro!', str(e))
                 except SenhaInvalidaException as e:
@@ -61,15 +69,10 @@ class ControladorUsuario:
                     self.__tela_usuario.show_message('Erro!', str(e))
                 except IdadeInvalidaException as e:
                     self.__tela_usuario.show_message('Erro!', str(e))
-                
-                usuario = Usuario(dados_usuario[1]['email'], dados_usuario[1]['senha'],
-                                  dados_usuario[1]['nome'], dados_usuario[1]['idade'])
-                self.__usuarios.append(usuario)
-                self.__tela_usuario.close()
             else:
                 self.__tela_usuario.show_message("Aviso", "Processo Cancelado")
                 break
-            
+
 
     def alterar_dados_usuario(self):
         if len(self.__usuarios) == 0:
@@ -133,10 +136,10 @@ class ControladorUsuario:
         else:
             lista_usuarios = list()
             for usuario in self.__usuarios:
-                lista_usuarios.append("\nTotal de usuários cadastrados: " + str(len(self.__usuarios))
-                                      + "\nNome do usuario: " + usuario.nome + "\nEmail do usuario: "
+                lista_usuarios.append("\nNome do usuario: " + usuario.nome + "\nEmail do usuario: "
                                       + usuario.email + "\nIdade do usuario: " + usuario.idade)
-            self.__tela_usuario.show_message("Listagem de Usuarios", "\n".join(lista_usuarios))
+            self.__tela_usuario.show_message("Listagem de Usuarios" + "\nTotal de usuarios "
+                                              "cadastrados: " + str(len(self.__usuarios)), "\n".join(lista_usuarios))
 
     def get_usuario_by_email(self):
         if len(self.__usuarios) == 0:
@@ -145,7 +148,7 @@ class ControladorUsuario:
         else:
             while True:
                 try:
-                    email = self.__tela_usuario_verificador.open()
+                    email = self.__tela_usuario_verificador.open('Verificador email')
                     if email[0] == 'Enviar':
                         for usuario in self.__usuarios:
                             if usuario.email == email[1]['email']:
@@ -164,7 +167,7 @@ class ControladorUsuario:
             self.__tela_usuario.show_message("Aviso!", "Não existem usuarios cadastrados! "
                                                     "Por favor cadastre pelo menos um")
         else:
-            email = self.__tela_usuario_verificador.open()
+            email = self.__tela_usuario_verificador.open('Verificador email')
             if email[0] == 'Enviar':
                 for usuario in self.__usuarios:
                     if usuario.email == email[1]['email']:
@@ -175,10 +178,24 @@ class ControladorUsuario:
                 self.__tela_usuario_verificador.show_message("Aviso", "Processo Cancelado")
 
     def credita(self):
-        dados_favorecido = self.__tela_usuario.tela_credita(self.__usuarios)
-        for usuario in self.__usuarios:
-            if usuario.email == dados_favorecido["email"]:
-                usuario.credite(dados_favorecido["valor"])
+        if len(self.__usuarios) == 0:
+            self.__tela_usuario.show_message('Aviso', 'Não existem usuarios cadastrados!'
+                                                      'Por favor, cadastre pelo menos um')
+        else:
+            usuario = self.get_usuario_by_email()
+            if usuario is not None:
+                while True:
+                    try:
+                        valor = self.__tela_usuario_credita.open()
+                        if valor is not None:
+                            print(valor[1]['valor'])
+                            if float(valor[1]['valor']) > 500 or float(valor[1]['valor']) < 1: 
+                                raise CreditoInvalidoException
+                            usuario.credite(valor[1][1])
+                        else:
+                            self.__tela_usuario.show_message("Aviso", "Processo Cancelado")
+                    except CreditoInvalidoException as e:
+                        self.__tela_usuario.show_message('Erro!', str(e))
 
     def verifica_usuario_existente(self):
         for usuario in self.__usuarios:
@@ -228,4 +245,4 @@ class ControladorUsuario:
         return lista_comunidades
 
     def gerar_compras(self, compras):
-        self.__compras = compras
+        self.__compras = compras   
