@@ -61,13 +61,15 @@ class ControladorUsuario:
                     self.__tela_usuario.show_message('Erro!', str(e))
                 except IdadeInvalidaException as e:
                     self.__tela_usuario.show_message('Erro!', str(e))
+                
+                usuario = Usuario(dados_usuario[1]['email'], dados_usuario[1]['senha'],
+                                  dados_usuario[1]['nome'], dados_usuario[1]['idade'])
+                self.__usuarios.append(usuario)
+                self.__tela_usuario.close()
             else:
                 self.__tela_usuario.show_message("Aviso", "Processo Cancelado")
                 break
-        usuario = Usuario(dados_usuario[1]['email'], dados_usuario[1]['senha'],
-                          dados_usuario[1]['nome'], dados_usuario[1]['idade'])
-        self.__usuarios.append(usuario)
-        self.__tela_usuario.close()
+            
 
     def alterar_dados_usuario(self):
         if len(self.__usuarios) == 0:
