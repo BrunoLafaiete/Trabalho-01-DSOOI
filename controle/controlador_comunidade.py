@@ -1,13 +1,17 @@
 from limite.tela_comunidade import TelaComunidade
+from limite.tela_comunidade_cria import TelaComunidadeCria
 from entidade.comunidade import Comunidade
 from excecoes.usuario_invalido_exception import UsuarioInvalidoException
-
+from excecoes.comunidade_invalida_exception import ComunidadeInvalidaException
+from excecoes.nome_invalido_exception import NomeInvalidoException
+import string
 
 
 class ControladorComunidade:
     def __init__(self, controlador_sistema):
         self.__comunidades = []
         self.__tela_comunidade = TelaComunidade()
+        self.__tela_comunidade_cria = TelaComunidadeCria()
         self.__usuarios = None
         self.__controlador_sistema = controlador_sistema
         self.__continua_nesse_menu = True
@@ -25,19 +29,53 @@ class ControladorComunidade:
             lista_opcoes[self.__tela_comunidade.open()]()
 
     def cria_comunidade(self):
-        dados_comunidade = self.__tela_comunidade.nova_comunidade(self.__comunidades)
-        comunidade = Comunidade(dados_comunidade["nome"], dados_comunidade["descricao"])
-        self.__comunidades.append(comunidade)
+        while True:
+            dados_comunidade = self.__tela_comunidade_cria.open()
+            if dados_comunidade[0] == 'Enviar':
+                try:
+                    nome_comunidade = dados_comunidade[1]['nome']
+                    descricao_comunidade = dados_comunidade[1]['descricao']
+                    if len(self.__comunidades) != 0:
+                        if nome_comunidade in self.nome_comunidades():
+                            raise ComunidadeInvalidaException
+                    for digito in nome_comunidade:
+                        if digito not in string.ascii_letters and digito not in [" ", "  "]:
+                            raise NomeInvalidoException
+                    comunidade = Comunidade(nome_comunidade, descricao_comunidade)
+                    self.__comunidades.append(comunidade)
+                    self.__tela_comunidade.close()
+                    break
+                except ComunidadeInvalidaException as e:
+                    self.__tela_comunidade.show_message('Aviso', str(e))
+                except NomeInvalidoException as e:
+                    self.__tela_comunidade.show_message('Aviso', str(e))
+            else:
+                self.__tela_comunidade.show_message("Aviso", "Processo Cancelado")
+                break
 
     def remove_comunidade(self):
         if len(self.__comunidades) == 0:
-            self.__tela_comunidade.show_message("Aviso!", "Não existem comunidades disponiveis!")
+            self.__tela_comunidade.show_message("Aviso ", "Não existem comunidades cadastradas!")
         else:
-            self.__tela_comunidade.remove_comunidade()
-            comunidade = self.get_comunidade_by_nome()
-            for usuario in comunidade.usuarios:
-                usuario.excluir_comunidade(comunidade)
-            self.__comunidades.remove(comunidade)
+            dados_comunidade = self.__tela_comunidade_remove.open()
+            nome = dados[1]['nome']
+            comunidade = self.comunidade_by_nome(nome)
+            if dados_comunidade[0] == 'Enviar':
+                try:
+                    if nome not in self.nome_comunidades():
+                        raise NomeInvalidoException
+                    for digito in nome:
+                        if digito not in string.ascii_letters and digito not in [" ", "  "]:
+                            raise NomeInvalidoException
+                    self.__comunidades.remove(comunidade)
+                    self.__tela_comunidades.close()
+                    break
+                except EmailInvalidoException:
+                    self.__tela_usuario.show_message('Aviso', 'Formato de email invalido ou email não '
+                                                     'existe! Um email valido segue o padrao: exemplo@gmail.com')
+            else:
+                self.__tela_usuario_verificador.show_message("Aviso", "Processo Cancelado")
+                break
 
     def adicionar_usuario_a_comunidade(self):
         if len(self.__comunidades) == 0:
@@ -126,6 +164,10 @@ class ControladorComunidade:
             except UsuarioInvalidoException:
                 self.__tela_comunidade.show_message("Aviso!", "Usuario ou Senha invalidos!")
 
+    def comunidade_by_nome(self, nome):
+        for comunidade in self.__comunidades:
+            if comunidade.nome == nome:
+                return comunidade
 
     def emails_usuarios(self):
         lista_emails = []
