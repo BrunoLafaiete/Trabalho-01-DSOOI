@@ -25,7 +25,7 @@ class Usuario(Pessoa):
             self.__saldo = saldo
 
     def credite(self, valor):
-        if isinstance(valor, float):
+        if isinstance(valor, int):
             self.__saldo += valor
 
     def debite(self, valor):
