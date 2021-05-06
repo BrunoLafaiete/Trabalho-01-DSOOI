@@ -152,12 +152,11 @@ class ControladorUsuario:
                     if email[0] == 'Enviar':
                         for usuario in self.__usuarios:
                             if usuario.email == email[1]['email']:
-                                self.__tela_usuario_verificador.close()
                                 return usuario
+                                self.__tela_usuario_verificador.close()
                         raise NomeInvalidoException
                     else:
                         self.__tela_usuario_verificador.close()
-                        return None
                 except NomeInvalidoException as e:
                     self.__tela_usuario_verificador.show_message('Aviso', str(e))
                     self.__tela_usuario_verificador.close()
@@ -167,23 +166,26 @@ class ControladorUsuario:
             self.__tela_usuario.show_message("Aviso!", "Não existem usuarios cadastrados! "
                                                     "Por favor cadastre pelo menos um")
         else:
-            while True:
-                email = self.__tela_usuario_verificador.open()
-                if email[0] == 'Enviar':
-                    if "@" not in dados_usuario[1]['email']:
+            email = self.__tela_usuario_verificador.open()
+            if email[0] == 'Enviar':
+                try:
+                    if "@" not in email[1]['email']:
                         raise EmailInvalidoException
-                    entrada = dados_usuario[1]['email'].split("@")
+                    entrada = email[1]['email'].split("@")
                     if entrada[1] != "gmail.com":
                         raise EmailInvalidoException
                     for usuario in self.__usuarios:
                         if usuario.email == email[1]['email']:
                             self.__tela_usuario.show_message(usuario.nome.upper(), "Nome do Usuario: " + usuario.nome +
-                                                                                "\nCredito do usuario: " + str(usuario.saldo)
-                                                                                + "\nEmail do usuario: " + usuario.email +
-                                                                                "\nIdade do usuario: " + usuario.idade)
+                                                                                    "\nCredito do usuario: " + str(usuario.saldo)
+                                                                                    + "\nEmail do usuario: " + usuario.email +
+                                                                                    "\nIdade do usuario: " + usuario.idade)
                             break
-                else:
-                    self.__tela_usuario_verificador.show_message("Aviso", "Processo Cancelado")
+                except EmailInvalidoException:
+                    self.__tela_usuario.show_message('Aviso', 'Formato de email invalido ou email não '
+                                                     'existe! Um email valido segue o padrao: exemplo@gmail.com')
+            else:
+                self.__tela_usuario_verificador.show_message("Aviso", "Processo Cancelado")
 
     def credita(self):
         if len(self.__usuarios) == 0:
@@ -198,7 +200,7 @@ class ControladorUsuario:
                         if valor is not None:
                             if float(valor[1]['valor']) > 500 or float(valor[1]['valor']) < 1: 
                                 raise ValueError
-                            usuario.credite(valor[1]['valor'])
+                            usuario.credite(int(valor[1]['valor']))
                             self.__tela_usuario_credita.close()
                             break
                         else:
