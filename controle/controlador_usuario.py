@@ -176,11 +176,12 @@ class ControladorUsuario:
                         raise EmailInvalidoException
                     for usuario in self.__usuarios:
                         if usuario.email == email[1]['email']:
+                            for comunidade in usuario.comunidades:
+                                print(comunidade.nome)
                             self.__tela_usuario.show_message(usuario.nome.upper(), "Nome do Usuario: " + usuario.nome +
                                                                                     "\nCredito do usuario: " + str(usuario.saldo)
                                                                                     + "\nEmail do usuario: " + usuario.email +
                                                                                     "\nIdade do usuario: " + usuario.idade)
-                            break
                 except EmailInvalidoException:
                     self.__tela_usuario.show_message('Aviso', 'Formato de email invalido ou email não '
                                                      'existe! Um email valido segue o padrao: exemplo@gmail.com')
