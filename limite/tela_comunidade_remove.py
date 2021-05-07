@@ -24,4 +24,3 @@ class TelaComunidadeRemove(TelaAbstrata):
 
     def close(self):
         self.__window.Close()
-    
