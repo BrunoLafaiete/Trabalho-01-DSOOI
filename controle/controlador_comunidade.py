@@ -2,6 +2,9 @@ from limite.tela_comunidade import TelaComunidade
 from limite.tela_comunidade_cria import TelaComunidadeCria
 from limite.tela_comunidade_remove import TelaComunidadeRemove
 from limite.tela_comunidade_add_usuario import TelaComunidadeAddUsuario
+from limite.tela_comunidade_del_usuario import TelaComunidadeDelUsuario
+from limite.tela_comunidade_verificador import TelaComunidadeVerificador
+from limite.tela_comunidade_busca_nome import TelaComunidadeBuscaNome
 from entidade.comunidade import Comunidade
 from excecoes.usuario_invalido_exception import UsuarioInvalidoException
 from excecoes.comunidade_invalida_exception import ComunidadeInvalidaException
@@ -17,6 +20,9 @@ class ControladorComunidade:
         self.__tela_comunidade_cria = TelaComunidadeCria()
         self.__tela_comunidade_remove = TelaComunidadeRemove()
         self.__tela_comunidade_add_usuario = TelaComunidadeAddUsuario()
+        self.__tela_comunidade_del_usuario = TelaComunidadeDelUsuario()
+        self.__tela_comunidade_verificador = TelaComunidadeVerificador()
+        self.__tela_comunidade_busca_nome = TelaComunidadeBuscaNome()
         self.__usuarios = None
         self.__controlador_sistema = controlador_sistema
         self.__continua_nesse_menu = True
@@ -88,6 +94,7 @@ class ControladorComunidade:
             while True:
                 dados = self.__tela_comunidade_add_usuario.open(self.nome_comunidades())
                 # dados -> ('Enviar', {'email': 'b@gmail.com', 'comunidade_escolhida': 'solitario'})
+                comunidade = self.comunidade_by_nome(dados[1]['nome_comunidade'])
                 usuario = self.usuario_by_email(dados[1]['email'])
                 email_usuario = dados[1]['email']
                 if dados[0] == 'Enviar':
@@ -99,7 +106,7 @@ class ControladorComunidade:
                         entrada = dados[1]['email'].split("@")
                         if entrada[1] != "gmail.com":
                             raise EmailInvalidoException
-                        print('FOI!')
+                        comunidade.incluir_usuario(usuario)
                         break
                     except EmailInvalidoException as e:
                         self.__tela_comunidade.show_message('Aviso', str(e))
@@ -113,23 +120,56 @@ class ControladorComunidade:
         elif len(self.__usuarios) == 0:
             self.__tela_comunidade.show_message("Aviso!", "Nao existem usuarios disponiveis!")
         else:
-            self.__tela_comunidade.remove_usuario()
-            usuario = self.get_usuario()
-            comunidade = self.__tela_comunidade.busca_comunidade(self.__comunidades, self.nome_comunidades())
-            if usuario in comunidade.usuarios:
-                comunidade.excluir_usuario(usuario)
-                usuario.excluir_comunidade(comunidade)
-            else:
-                self.__tela_comunidade.show_message("Aviso!", "O usuario nao esta nesta comunidade")
+            while True:
+                email = self.__tela_comunidade_verificador.open()
+                if email[0] == 'Enviar':
+                    try:
+                        if email[1]['email'] not in self.emails_usuarios():
+                            raise EmailInvalidoException
+                        if "@" not in email[1]['email']:
+                            raise EmailInvalidoException
+                        entrada = email[1]['email'].split("@")
+                        if entrada[1] != "gmail.com":
+                            raise EmailInvalidoException
+                    except EmailInvalidoException as e:
+                        self.__tela_comunidade.show_message('Aviso', str(e))
+                    usuario = self.usuario_by_email(email[1]['email'])
+                    while True:
+                        dados = self.__tela_comunidade_del_usuario.open(self.usuario_comunidades_nomes(usuario))
+                        comunidade = self.comunidade_by_nome(dados[1]['nome_comunidade'])
+                        if dados[0] == 'Enviar':
+                            usuario.excluir_comunidade(comunidade)
+                            comunidade.excluir_usuario(usuario)
+                        else:
+                            self.__tela_comunidade.show_message('Aviso', 'Processo cancelado')
+                else:
+                    self.__tela_comunidade.show_message('Aviso', 'Processo cancelado')
+                    break
+                break              
 
     def busca_comunidade_por_nome(self):
         if len(self.__comunidades) == 0:
             self.__tela_comunidade.show_message("Aviso!", "Nao existem comunidades disponiveis!")
         else:
-            comunidade = self.__tela_comunidade.busca_comunidade(self.__comunidades, self.nome_comunidades())
-            self.__tela_comunidade.retorna_comunidade({"nome": comunidade.nome,
-                                                       "descricao": comunidade.descricao,
-                                                       "numero_participantes": len(comunidade.usuarios)})
+            while True:
+                dados = self.__tela_comunidade_busca_nome.open()
+                if dados[0] == 'Enviar':
+                    try:
+                        if dados[1]['nome'] not in self.nome_comunidades():
+                            raise NomeInvalidoException
+                        for comunidade in self.__comunidades:
+                            if comunidade.nome == dados[1]['nome']:
+                                self.__tela_comunidade_busca_nome.show_message("Comunidade " + comunidade.nome.upper(),
+                                                                               "Descricao: " + comunidade.descricao +
+                                                                               "\nParticipantes: " + str(len(comunidade.usuarios)))
+                                break
+                    except NomeInvalidoException as e:
+                        self.__tela_comunidade.show_message('Aviso', str(e))
+                        break
+                else:
+                    self.__tela_comunidade.show_message('Aviso', 'Processo cancelado')
+                    break
+                break
 
     def lista_comunidades(self):
         if len(self.__comunidades) == 0:
@@ -163,23 +203,6 @@ class ControladorComunidade:
     def comunidades(self):
         return self.__comunidades
 
-    def get_comunidade_by_nome(self):
-        comunidade = self.__tela_comunidade.busca_comunidade(self.__comunidades, self.nome_comunidades())
-        return comunidade
-
-    def get_usuario(self):
-        while True:
-            dados_usuario = self.__tela_comunidade.encontrar_usuario()
-            usuario_email = dados_usuario["email"]
-            usuario_senha = dados_usuario["senha"]
-            try:
-                for usuario in self.__usuarios:
-                    if usuario.senha == usuario_senha and usuario.email == usuario_email:
-                        return usuario
-                    raise UsuarioInvalidoException
-            except UsuarioInvalidoException:
-                self.__tela_comunidade.show_message("Aviso!", "Usuario ou Senha invalidos!")
-
     def comunidade_by_nome(self, nome):
         for comunidade in self.__comunidades:
             if comunidade.nome == nome:
@@ -201,3 +224,11 @@ class ControladorComunidade:
         for comunidade in self.__comunidades:
             lista_nomes.append(comunidade.nome)
         return lista_nomes
+
+    def usuario_comunidades_nomes(self, usuario):
+        nomes_comunidades_do_usuario = []
+        for comunidade in usuario.comunidades:
+            nomes_comunidades_do_usuario.append(comunidade.nome)
+        print(nomes_comunidades_do_usuario)
+        return nomes_comunidades_do_usuario
+
