@@ -21,7 +21,7 @@ class TelaComunidadeAddUsuario(TelaAbstrata):
                   [sg.Text('Email: ', size=(17, 1), font=('Helvetica', 10)),
                    sg.InputText(key='email')],
                   [sg.Text('Comunidades: ', size=(17, 1), font=('Helvetica', 10))],
-                  [sg.Combo(lista, key='comunidade_escolhida')],
+                  [sg.Combo(lista, key='nome_comunidade')],
                   [sg.Button('Enviar', font=('Helvetica', 10)), sg.Button('Cancelar', font=('Helvetica', 10))]]
         self.__window = sg.Window("Cadastrar um jogo",
                                  finalize=True).Layout(layout)
