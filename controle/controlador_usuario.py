@@ -152,7 +152,7 @@ class ControladorUsuario:
                     if email[0] == 'Enviar':
                         for usuario in self.__usuarios:
                             if usuario.email == email[1]['email']:
-                                return usuario
+                                return [usuario, email[0]]
                                 self.__tela_usuario_verificador.close()
                         raise NomeInvalidoException
                     else:
@@ -194,22 +194,27 @@ class ControladorUsuario:
         else:
             while True:
                 usuario = self.get_usuario_by_email()
-                if usuario is not None:
-                    try:
-                        valor = self.__tela_usuario_credita.open()
-                        if valor is not None:
-                            if float(valor[1]['valor']) > 500 or float(valor[1]['valor']) < 1: 
-                                raise ValueError
-                            usuario.credite(int(valor[1]['valor']))
-                            self.__tela_usuario_credita.close()
-                            break
-                        else:
-                            self.__tela_usuario.show_message("Aviso", "Processo Cancelado")
-                    except ValueError:
-                        self.__tela_usuario.show_message('Erro!', 'Digite um valor entre 1 e 500')
+                if usuario[1] == 'Enviar':
+                    if usuario[0] is not None:
+                        try:
+                            valor = self.__tela_usuario_credita.open()
+                            if valor is not None:
+                                if float(valor[1]['valor']) > 500 or float(valor[1]['valor']) < 1: 
+                                    raise ValueError
+                                usuario[0].credite(int(valor[1]['valor']))
+                                self.__tela_usuario_credita.close()
+                                break
+                            else:
+                                self.__tela_usuario.show_message("Aviso", "Processo Cancelado")
+                        except ValueError:
+                            self.__tela_usuario.show_message('Erro!', 'Digite um valor entre 1 e 500')
+                    else:
+                        self.__tela_usuario.show_message("Aviso", "Processo Cancelado")
+                        break
                 else:
                     self.__tela_usuario.show_message("Aviso", "Processo Cancelado")
                     break
+                break
 
     def verifica_usuario_existente(self):
         for usuario in self.__usuarios:
