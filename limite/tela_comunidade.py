@@ -1,7 +1,4 @@
 from limite.tela_abstrata import TelaAbstrata
-from excecoes.nome_invalido_exception import NomeInvalidoException
-from excecoes.descricao_invalida_exception import DescricaoInvalidaException
-from excecoes.comunidade_invalida_exception import ComunidadeInvalidaException
 import PySimpleGUI as sg
 
 
@@ -18,7 +15,8 @@ class TelaComunidade(TelaAbstrata):
 
     def tela_opcoes(self):
         sg.theme('Reddit')
-        layout = [[sg.Button('Criar uma nova comunidade', key=1, size=('1000', '2'),
+        layout = [[sg.Text(' ', font=('Helvetica', 10))],
+                  [sg.Button('Criar uma nova comunidade', key=1, size=('1000', '2'),
                             font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
                   [sg.Button('Adicionar um usuário a uma comunidade', key=2, size=('1000', '2'),
                             font=('Helvetica', 12), border_width='0', focus=(True, 'invisible'))],
