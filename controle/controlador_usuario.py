@@ -25,12 +25,13 @@ class ControladorUsuario:
         self.__compras = None
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastra_usuario, 2: self.alterar_dados_usuario,
-                        3: self.informar_dados_usuario, 4: self.lista_usuarios,
-                        5: self.credita, 6: self.cartao_de_credito, 0: self.retorna_menu_principal}
+        lista_opcoes = {0: self.voltar, 1: self.cadastra_usuario,
+                        2: self.alterar_dados_usuario, 3: self.informar_dados_usuario,
+                        4: self.lista_usuarios, 5: self.credita, 6: self.cartao_de_credito}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
             lista_opcoes[self.__tela_usuario.open()]()
+            self.__tela_usuario.close()
 
     def cadastra_usuario(self):
         while True:
@@ -174,14 +175,19 @@ class ControladorUsuario:
                     entrada = email[1]['email'].split("@")
                     if entrada[1] != "gmail.com":
                         raise EmailInvalidoException
+                    lista_comunidades = []
                     for usuario in self.__usuarios:
                         if usuario.email == email[1]['email']:
                             for comunidade in usuario.comunidades:
-                                print(comunidade.nome)
+                                lista_comunidades.append(comunidade.nome)
+                            if len(lista_comunidades) == 0:
+                                lista_comunidades = 'Nenhuma'
                             self.__tela_usuario.show_message(usuario.nome.upper(), "Nome do Usuario: " + usuario.nome +
                                                                                     "\nCredito do usuario: " + str(usuario.saldo)
                                                                                     + "\nEmail do usuario: " + usuario.email +
-                                                                                    "\nIdade do usuario: " + usuario.idade)
+                                                                                    "\nIdade do usuario: " + usuario.idade +
+                                                                                    "\nComunidades que participa: " +
+                                                                                    "\n".join(lista_comunidades))
                 except EmailInvalidoException:
                     self.__tela_usuario.show_message('Aviso', 'Formato de email invalido ou email não '
                                                      'existe! Um email valido segue o padrao: exemplo@gmail.com')
@@ -238,7 +244,7 @@ class ControladorUsuario:
             else:
                 self.__tela_usuario.show_message("Aviso!", "Senha invalida!")
 
-    def retorna_menu_principal(self):
+    def voltar(self):
         self.__continua_nesse_menu = False
 
     @property

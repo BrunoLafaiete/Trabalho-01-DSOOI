@@ -5,6 +5,7 @@ from limite.tela_comunidade_add_usuario import TelaComunidadeAddUsuario
 from limite.tela_comunidade_del_usuario import TelaComunidadeDelUsuario
 from limite.tela_comunidade_verificador import TelaComunidadeVerificador
 from limite.tela_comunidade_busca_nome import TelaComunidadeBuscaNome
+from limite.tela_comunidade_alterar import TelaComunidadeAltera
 from entidade.comunidade import Comunidade
 from excecoes.usuario_invalido_exception import UsuarioInvalidoException
 from excecoes.comunidade_invalida_exception import ComunidadeInvalidaException
@@ -23,6 +24,7 @@ class ControladorComunidade:
         self.__tela_comunidade_del_usuario = TelaComunidadeDelUsuario()
         self.__tela_comunidade_verificador = TelaComunidadeVerificador()
         self.__tela_comunidade_busca_nome = TelaComunidadeBuscaNome()
+        self.__tela_comunidade_altera = TelaComunidadeAltera()
         self.__usuarios = None
         self.__controlador_sistema = controlador_sistema
         self.__continua_nesse_menu = True
@@ -107,6 +109,7 @@ class ControladorComunidade:
                         if entrada[1] != "gmail.com":
                             raise EmailInvalidoException
                         comunidade.incluir_usuario(usuario)
+                        usuario.incluir_comunidade(comunidade)
                         break
                     except EmailInvalidoException as e:
                         self.__tela_comunidade.show_message('Aviso', str(e))
@@ -123,7 +126,6 @@ class ControladorComunidade:
             email = self.__tela_comunidade_verificador.open()
             if email[0] == 'Enviar':
                 try:
-                    print(email[1])
                     if email[1]['email'] not in self.emails_usuarios():
                         raise EmailInvalidoException
                     for usuario in self.__usuarios:
@@ -137,12 +139,16 @@ class ControladorComunidade:
                 self.__tela_comunidade.show_message("Aviso!", "Processo Cancelado")
 
     def comunidade_remove_usuario(self, usuario):
-        print(self.__usuarios)
-        print(usuario)               # <- até aqui o usuario está certo
         comunidades_nome = self.comunidades_do_usuario(usuario)
         dado = self.__tela_comunidade_del_usuario.open(comunidades_nome)
         if dado[0] == 'Enviar':
-            print(comunidades_nome)   
+            for comunidade in usuario.comunidades:
+                for i in comunidades_nome:
+                    if i == comunidade.nome:
+                        usuario.excluir_comunidade(comunidade)
+                        comunidade.excluir_usuario(usuario)
+        else:
+            self.__tela_comunidade_del_usuario.show_message("Aviso", "Processo cancelado")
 
     def busca_comunidade_por_nome(self):
         if len(self.__comunidades) == 0:
@@ -180,17 +186,30 @@ class ControladorComunidade:
 
     def altera_comunidade(self):
         if len(self.__comunidades) == 0:
-            self.__tela_comunidade.show_message("Aviso!", "Nao existem comunidades disponiveis!")
+            self.__tela_comunidade.show_message("Aviso!", "Nao existem comunidades cadastradas!")
         else:
-            comunidade = self.__tela_comunidade.busca_comunidade(self.__comunidades, self.nome_comunidades())
-            dados_comunidade = self.__tela_comunidade.altera_comunidade(self.__comunidades, comunidade.nome)
-            comunidade.nome = dados_comunidade["nome"]
-            comunidade.descricao = dados_comunidade["descricao"]
-
-    def existe_comunidade(self, name):
-        for comunidade in self.__comunidades:
-            if comunidade.nome == name:
-                return True
+            comunidade = self.__tela_comunidade_altera.open(self.nome_comunidades(), 'tela_1')
+            if comunidade[0] == 'Enviar':
+                dados = self.__tela_comunidade_altera.open(self.nome_comunidades(), 'tela_2')
+                novo_nome = dados[1]['nome']
+                nova_descricao = dados[1]['descricao']
+                if dados[0] == 'Enviar':
+                    try:
+                        for digito in novo_nome:
+                            if digito not in string.ascii_letters and digito not in [" ", "  "] and digito not in string.digits:
+                                raise NomeInvalidoException
+                        for i in nova_descricao:
+                            if i not in string.ascii_letters and i not in [" ", "  "] and i not in string.digits:
+                                raise NomeInvalidoException
+                        obj_comunidade = self.comunidade_by_nome(comunidade[1]['comunidade'][0])
+                        obj_comunidade.nome = novo_nome
+                        obj_comunidade.descricao = nova_descricao
+                    except NomeInvalidoException as e:
+                        self.__tela_comunidade.show_message("Aviso", str(e))
+                else:
+                    self.__tela_comunidade.show_message("Aviso", "Processo cancelado")
+            else:
+                self.__tela_comunidade.show_message("Aviso", "Processo cancelado")
 
     def retorna_menu_principal(self):
         self.__continua_nesse_menu = False

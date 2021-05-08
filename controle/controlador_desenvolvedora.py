@@ -56,7 +56,6 @@ class ControladorDesenvolvedora:
             if desenvolvedora_mudar is not None:
                 nome_antigo = desenvolvedora_mudar.nome
                 while True:
-
                     try:
                         novo_nome = self.__tela_desenvolvedora_alterar.open()
                         if novo_nome[0] == 'Submit':
