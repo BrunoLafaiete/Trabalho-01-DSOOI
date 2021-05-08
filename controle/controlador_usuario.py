@@ -208,7 +208,7 @@ class ControladorUsuario:
                             if valor is not None:
                                 if float(valor[1]['valor']) > 500 or float(valor[1]['valor']) < 1: 
                                     raise ValueError
-                                usuario[0].credite(int(valor[1]['valor']))
+                                usuario[0].credite(float(valor[1]['valor']))
                                 self.__tela_usuario_credita.close()
                                 break
                             else:
@@ -222,16 +222,6 @@ class ControladorUsuario:
                     self.__tela_usuario.show_message("Aviso", "Processo Cancelado")
                     break
                 break
-
-    def verifica_usuario_existente(self):
-        for usuario in self.__usuarios:
-            if self.__tela_usuario.verificar_email() == usuario.email:
-                if self.__tela_usuario.verificar_senha() == usuario.senha:
-                    dados_usuario = self.__tela_usuario.alterar_usuario(self.__usuarios, usuario.email)
-                    usuario.email = dados_usuario["email"]
-                    usuario.senha = dados_usuario["senha"]
-                    usuario.nome = dados_usuario["nome"]
-                    usuario.idade = dados_usuario["idade"]
 
     def cartao_de_credito(self):
         if len(self.__usuarios) == 0:
