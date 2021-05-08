@@ -17,6 +17,7 @@ class ControladorCartaodeCredito:
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
             lista_opcoes[self.__tela_cartao_de_credito.open()]()
+            self.__tela_cartao_de_credito.close()
 
     def cadastrar_cartao(self):
         if self.__usuario.cartao is None:
