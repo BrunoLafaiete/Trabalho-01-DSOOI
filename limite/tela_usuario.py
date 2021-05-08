@@ -1,9 +1,4 @@
 from limite.tela_abstrata import TelaAbstrata
-'''from excecoes.nome_invalido_exception import NomeInvalidoException
-from excecoes.senha_invalida_exception import SenhaInvalidaException
-from excecoes.email_invalido_exception import EmailInvalidoException
-from excecoes.idade_invalida_exception import IdadeInvalidaException
-from excecoes.credito_invalido_exception import CreditoInvalidoException'''
 import PySimpleGUI as sg
 
 
