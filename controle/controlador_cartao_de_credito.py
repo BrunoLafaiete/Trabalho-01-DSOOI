@@ -21,10 +21,9 @@ class ControladorCartaodeCredito:
     def cadastrar_cartao(self):
         if self.__usuario.cartao is None:
             dados_cartao = self.__tela_cartao_de_credito.cadastra_cartao()
-            cartao = CartaoDeCredito(dados_cartao["nome portador"], dados_cartao["instituicao"],
-                                     dados_cartao["numero cartao"], dados_cartao["validade"],
-                                     dados_cartao["codigo seguranca"])
-            self.__usuario.cartao = cartao
+            self.__usuario.add_cartao(dados_cartao["nome portador"], dados_cartao["instituicao"],
+                                      dados_cartao["numero cartao"], dados_cartao["validade"],
+                                      dados_cartao["codigo seguranca"])
         else:
             self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario jah possui um cartao cadastrado!")
 
@@ -41,7 +40,7 @@ class ControladorCartaodeCredito:
 
     def remover_cartao(self):
         if self.__usuario.cartao is not None:
-            self.__usuario.cartao = None
+            self.__usuario.remover_cartao()
         else:
             self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario nao possui um cartao cadastrado!")
 
