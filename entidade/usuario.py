@@ -1,7 +1,10 @@
 from entidade.cartao_de_credito import CartaoDeCredito
 from entidade.pessoa import Pessoa
 
+
 class Usuario(Pessoa):
+
+    __codigo = 0
 
     def __init__(self, email: str, senha: str, nome: str, idade: int):
         super().__init__(email, senha, nome, idade)
@@ -14,6 +17,8 @@ class Usuario(Pessoa):
         self.__jogos = []
         self.__compras = []
         self.__cartao = None
+        Usuario.__codigo = Usuario.__codigo + 1
+        self.__id = Usuario.__codigo
 
     @property
     def saldo(self):
@@ -25,7 +30,7 @@ class Usuario(Pessoa):
             self.__saldo = saldo
 
     def credite(self, valor):
-        if isinstance(valor, int):
+        if isinstance(valor, float):
             self.__saldo += valor
 
     def debite(self, valor):
@@ -69,3 +74,13 @@ class Usuario(Pessoa):
     @cartao.setter
     def cartao(self, cartao: CartaoDeCredito):
         self.__cartao = cartao
+
+    def add_cartao(self, nome, instituicao, numero, validade, codigo_seguranca):
+        self.__cartao = CartaoDeCredito(nome, instituicao, numero, validade, codigo_seguranca)
+
+    def remover_cartao(self):
+        self.__cartao = None
+
+    @property
+    def id(self):
+        return self.__id
