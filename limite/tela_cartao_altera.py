@@ -2,7 +2,7 @@ from limite.tela_abstrata import TelaAbstrata
 import PySimpleGUI as sg
 
 
-class TelaCartaoRetorna(TelaAbstrata):
+class TelaCartaoAltera(TelaAbstrata):
     def _init_(self):
         self.__window = None
 
@@ -16,9 +16,8 @@ class TelaCartaoRetorna(TelaAbstrata):
 
     def tela_opcoes(self, bandeiras):
         sg.theme('Reddit')
-        layout = [[sg.Text('Dados do seu cartao', element_justification='center',
-                           font=('Helvetica', 10))],
-                  [sg.Text('Nome do portador: ', size=('17', '1'), font=('Helvetica', 10)),
+        layout = [[sg.Text('Por favor digite os novos dados do cartao', font=('Helvetica', 10))],
+                  [sg.Text('Nome do titular: ', size=('17', '1'), font=('Helvetica', 10)),
                    sg.InputText(key='nome_portador')],
                   [sg.Text('Numero do cartao: ', size=('17', '1'), font=('Helvetica', 10)),
                    sg.InputText(key='numero')],
@@ -28,7 +27,7 @@ class TelaCartaoRetorna(TelaAbstrata):
                   [sg.Text('Bandeiras', font=('Helvetica', 10))],
                   [sg.Listbox(bandeiras, size=(15, 3), key='bandeira')],
                   [sg.Button('Enviar', font=('Helvetica', 10)), sg.Button('Cancelar', font=('Helvetica', 10))]]
-        self.__window = sg.Window("Cadastrar um cartao de credito", element_justification='center',
+        self.__window = sg.Window("Alterando o cartao de credito", element_justification='center',
                                   finalize=True).Layout(layout)
 
     def close(self):

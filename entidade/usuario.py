@@ -78,6 +78,13 @@ class Usuario(Pessoa):
     def add_cartao(self, nome, instituicao, numero, validade, codigo_seguranca):
         self.__cartao = CartaoDeCredito(nome, instituicao, numero, validade, codigo_seguranca)
 
+    def altera_cartao(self, nome, instituicao, numero, validade, codigo_seguranca):
+        self.__cartao.nome_portador = nome
+        self.__cartao.instituicao = instituicao
+        self.__cartao.numero = numero
+        self.__cartao.validade = validade
+        self.__cartao.codigo_seguranca = codigo_seguranca
+
     def remover_cartao(self):
         self.__cartao = None
 

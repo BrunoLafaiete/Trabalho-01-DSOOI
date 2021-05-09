@@ -1,6 +1,7 @@
 from entidade.cartao_de_credito import CartaoDeCredito
 from limite.tela_cartao_de_credito import TelaCartaoDeCredito
 from limite.tela_cartao_cadastra import TelaCartaoCadastra
+from limite.tela_cartao_altera import TelaCartaoAltera
 from excecoes.nome_invalido_exception import NomeInvalidoException
 from excecoes.numero_cartao_invalido_exception import NumeroCartaoInvalidoException
 from excecoes.validade_invalida_exception import ValidadeInvalidaException
@@ -11,6 +12,7 @@ class ControladorCartaodeCredito:
     def __init__(self):
         self.__tela_cartao_de_credito = TelaCartaoDeCredito()
         self.__tela_cartao_cadastra = TelaCartaoCadastra()
+        self.__tela_cartao_altera = TelaCartaoAltera()
         self.__usuario = None
         self.__continua_nesse_menu = True
 
@@ -35,8 +37,7 @@ class ControladorCartaodeCredito:
                 dados_cartao = self.__tela_cartao_cadastra.open()
                 if dados_cartao[0] == "Enviar":
                     try:
-                        print(dados_cartao)
-                        print(dados_cartao[1]['nome_portador'], dados_cartao[1]['numero'], dados_cartao[1]['codigo'])
+                        print(dados_cartao[1]['nome_portador'], dados_cartao[1]['numero'], dados_cartao[1]['codigo'], dados_cartao[1]['data_validade'])
                         if dados_cartao[1]['nome_portador'] != self.__usuario.nome:
                             raise NomeInvalidoException
                         if not 13 < len(dados_cartao[1]['numero']) < 16:
@@ -48,9 +49,8 @@ class ControladorCartaodeCredito:
                             raise NumeroCartaoInvalidoException
                         if dados_cartao[1]['data_validade'] is None:
                             raise ValidadeInvalidaException
-                        data_de_validade = dados_cartao[1]['data_validade'].split(" ")
                         self.__usuario.add_cartao(dados_cartao[1]['nome_portador'], dados_cartao[1]['bandeira'][0],
-                                                dados_cartao[1]['numero'], data_de_validade[0],
+                                                dados_cartao[1]['numero'], dados_cartao[1]['data_validade'],
                                                 dados_cartao[1]['codigo'])
                         self.__tela_cartao_cadastra.close()
                         break
@@ -65,40 +65,40 @@ class ControladorCartaodeCredito:
                         break
 
     def alterar_cartao(self):
-        if self.__usuario.cartao is not None:
-            dados = self.__tela_cartao_de_credito.altera_cartao()
-            self.__usuario.cartao.nome_portador = dados["nome portador"]
-            self.__usuario.cartao.instituicao = dados["instituicao"]
-            self.__usuario.cartao.numero = dados["numero cartao"]
-            self.__usuario.cartao.validade = dados["validade"]
-            self.__usuario.cartao.codigo_seguranca = dados["codigo seguranca"]
+        if self.__usuario.cartao is None:
+            self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario nao possui um cartao "
+                                                                 "cadastrado para alterar!")
         else:
-            self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario nao possui um cartao cadastrado!")
+            dados_cartao = self.__tela_cartao_altera.open()
+            if dados_cartao[0] == 'Enviar':
+                self.__usuario.altera_cartao(dados_cartao[1]['nome_portador'], dados_cartao[1]['bandeira'][0],
+                                             dados_cartao[1]['numero'], dados_cartao[1]['data_validade'],
+                                             dados_cartao[1]['codigo'])
+                self.__tela_cartao_altera.close()
 
     def remover_cartao(self):
-        if self.__usuario.cartao is not None:
-            self.__usuario.remover_cartao()
+        if self.__usuario.cartao is None:
+            self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario nao "
+                                                                 "possui um cartao cadastrado!")
         else:
-            self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario nao possui um cartao cadastrado!")
+            self.__usuario.remover_cartao()
 
     def retornar_cartao(self):
         if self.__usuario.cartao is None:
             self.__tela_cartao_de_credito.show_message("Aviso!", "O usuario nao possui "
                                                        "um cartao cadastrado!")
         else:
+            print(self.__usuario.cartao.validade)
+            print(self.__usuario.cartao.nome_portador, self.__usuario.cartao.instituicao, self.__usuario.cartao.codigo_seguranca)
+            data_de_validade = self.__usuario.cartao.validade.split(" ")
+            print(data_de_validade)
             self.__tela_cartao_de_credito.show_message("Seu cartao de credito", "Titular: " +
                                                                                 self.__usuario.cartao.nome_portador +
                                                                                 "\nInstituicao: " + self.__usuario.cartao.instituicao
                                                                                 + "\nNumero: " + self.__usuario.cartao.numero
-                                                                                + "\nValidade: " + self.__usuario.cartao.validade
+                                                                                + "\nValidade: " + data_de_validade[0]
                                                                                 + "\nCodigo de seguranca: " +
                                                                                 self.__usuario.cartao.codigo_seguranca)
-            
-            self.__tela_cartao_de_credito.mostra_cartao({"nome": self.__usuario.cartao.nome_portador,
-                                                         "instituicao": self.__usuario.cartao.instituicao,
-                                                         "numero": self.__usuario.cartao.numero,
-                                                         "validade": self.__usuario.cartao.validade,
-                                                         "codigo": self.__usuario.cartao.codigo_seguranca})
 
     def retorna(self):
         self.__continua_nesse_menu = False
