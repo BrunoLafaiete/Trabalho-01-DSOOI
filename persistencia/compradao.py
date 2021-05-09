@@ -10,9 +10,6 @@ class CompraDAO(DAO):
         if (compra is not None) and (isinstance(key, int)):
             super().add(key, compra)
 
-
-'''''
     def remove(self, compra: Compra):
-        if (isinstance()) and ( is not None):
-            super().remove(compra)
-'''''
+        if isinstance(compra, Compra) and (compra is not None):
+            super().remove(compra.id)

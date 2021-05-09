@@ -7,9 +7,9 @@ class JogoDAO(DAO):
         super().__init__('jogo.pkl')
 
     def add(self, key, jogo: Jogo):
-        if (jogo is not None) and (isinstance(jogo.nome, str)):
-            super().add(jogo.nome, jogo)
+        if (jogo is not None) and (isinstance(key, int)):
+            super().add(key, jogo)
 
     def remove(self, jogo: Jogo):
         if (isinstance(jogo, Jogo)) and (jogo is not None):
-            super().remove(jogo.nome)
+            super().remove(jogo.id)
