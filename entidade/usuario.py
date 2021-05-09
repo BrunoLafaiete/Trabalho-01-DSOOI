@@ -1,6 +1,7 @@
 from entidade.cartao_de_credito import CartaoDeCredito
 from entidade.pessoa import Pessoa
 
+
 class Usuario(Pessoa):
 
     def __init__(self, email: str, senha: str, nome: str, idade: int):
@@ -14,6 +15,7 @@ class Usuario(Pessoa):
         self.__jogos = []
         self.__compras = []
         self.__cartao = None
+        self.__id = id(self)
 
     @property
     def saldo(self):
@@ -69,3 +71,24 @@ class Usuario(Pessoa):
     @cartao.setter
     def cartao(self, cartao: CartaoDeCredito):
         self.__cartao = cartao
+
+    def add_cartao(self, nome, instituicao, numero, validade, codigo_seguranca):
+        self.__cartao = CartaoDeCredito(nome, instituicao, numero, validade, codigo_seguranca)
+
+    def altera_cartao(self, nome, instituicao, numero, validade, codigo_seguranca):
+        self.__cartao.nome_portador = nome
+        self.__cartao.instituicao = instituicao
+        self.__cartao.numero = numero
+        self.__cartao.validade = validade
+        self.__cartao.codigo_seguranca = codigo_seguranca
+
+    def remover_cartao(self):
+        self.__cartao = None
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def nome(self):
+        return self.__nome

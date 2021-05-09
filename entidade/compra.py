@@ -4,6 +4,7 @@ from entidade.usuario import Usuario
 
 
 class Compra:
+
     def __init__(self, jogo: Jogo, usuario: Usuario):
         self.__jogo = jogo
         self.__jogo.incluir_compra(self)
@@ -11,6 +12,7 @@ class Compra:
         self.__usuario.incluir_compra(self)
         self.__usuario.jogos.append(jogo)
         self.__data = date.today()
+        self.__id = id(self)
 
     @property
     def data(self):
@@ -23,3 +25,7 @@ class Compra:
     @property
     def usuario(self):
         return self.__usuario
+
+    @property
+    def id(self):
+        return self.__id

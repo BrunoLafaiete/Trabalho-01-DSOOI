@@ -1,10 +1,13 @@
 from entidade.usuario import Usuario
 
+
 class Comunidade:
+
     def __init__(self, nome: str, descricao: str):
         self.__nome = nome
         self.__descricao = descricao
         self.__usuarios = []
+        self.__id = id(self)
 
     @property
     def nome(self):
@@ -31,3 +34,7 @@ class Comunidade:
 
     def excluir_usuario(self, usuario: Usuario):
         self.__usuarios.remove(usuario)
+
+    @property
+    def id(self):
+        return self.__id

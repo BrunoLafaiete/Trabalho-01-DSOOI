@@ -8,6 +8,7 @@ class Jogo:
         self.__faixa_etaria = faixa_etaria
         self.__preco = preco
         self.__compras = []
+        self.__id = id(self)
 
     @property
     def nome(self):
@@ -58,3 +59,7 @@ class Jogo:
     @property
     def compras(self):
         return self.__compras
+
+    @property
+    def id(self):
+        return self.__id

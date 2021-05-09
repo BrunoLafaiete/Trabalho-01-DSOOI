@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 
+
 class Pessoa(ABC):
+
     @abstractmethod
     def __init__(self, email: str, senha: str, nome: str, idade: int):
         self.__email = email
