@@ -2,7 +2,6 @@ from datetime import date
 
 
 class CartaoDeCredito:
-
     def __init__(self, nome_portador, instituicao, numero, validade: date, codigo_seguranca):
         self.__nome_portador = nome_portador
         self.__instituicao = instituicao

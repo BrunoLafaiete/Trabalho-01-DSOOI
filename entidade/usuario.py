@@ -84,3 +84,7 @@ class Usuario(Pessoa):
     @property
     def id(self):
         return self.__id
+
+    @property
+    def nome(self):
+        return self.__nome
