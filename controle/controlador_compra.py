@@ -1,134 +1,175 @@
 from limite.tela_compra import TelaCompra
+from limite.tela_compra_cadastro import TelaCompraCadastro
+from limite.tela_compra_jogo import TelaCompraJogo
+from limite.tela_compra_usuario import TelaCompraUsuario
 from entidade.compra import Compra
 from excecoes.usuario_invalido_exception import UsuarioInvalidoException
-from excecoes.nome_invalido_exception import NomeInvalidoException
 from excecoes.saldo_insuficiente_exception import SaldoInsuficienteException
 from excecoes.jah_possui_jogo_esception import JahPossuiJogoException
+from excecoes.jogo_invalido_exception import JogoInvalidoException
+from persistencia.compradao import CompraDAO
 
 
 class ControladorCompra:
     def __init__(self, controlador_sistema):
-        self.__compras = []
+        self.__compradao = CompraDAO()
         self.__tela_compra = TelaCompra()
+        self.__tela_compra_cadastro = TelaCompraCadastro()
+        self.__tela_compra_jogo = TelaCompraJogo()
+        self.__tela_compra_usuario = TelaCompraUsuario()
         self.__controlador_sistema = controlador_sistema
         self.__continua_nesse_menu = True
-        self.__usuarios = None
-        self.__jogos = None
-
-    def incluir_usuarios_e_jogos(self, jogos, usuarios):
-        self.__jogos = jogos
-        self.__usuarios = usuarios
 
     def abre_tela(self):
         lista_opcoes = {1: self.comprar_jogo, 2: self.verifica_dados_compra, 3: self.historico_compras_usuario,
                         4: self.historico_compras_jogo, 5: self.listar_compras, 0: self.retorna_menu_principal}
         self.__continua_nesse_menu = True
         while self.__continua_nesse_menu:
-            lista_opcoes[self.__tela_compra.tela_opcoes()]()
+            lista_opcoes[self.__tela_compra.open()]()
 
     def comprar_jogo(self):
-        self.__tela_compra.compra_by_nome()
-        jogo = self.get_jogo()
-        usuario = self.get_usuario()
-        try:
-            if usuario.cartao is not None:
-                comprar_por_cartao = self.__tela_compra.compra_cartao()
-            else:
-                comprar_por_cartao = False
-            if not comprar_por_cartao:
-                if jogo.preco > usuario.saldo:
-                    raise SaldoInsuficienteException
-            if jogo.faixa_etaria > usuario.idade:
-                raise ValueError
-            if jogo in usuario.jogos:
-                raise JahPossuiJogoException
-            compra = Compra(jogo, usuario)
-            if not comprar_por_cartao:
-                usuario.debite(jogo.preco)
-            self.__compras.append(compra)
-        except ValueError:
-            self.__tela_compra.mostra_mensagem_erro("O Usuario nao possui a idade necessaria")
-        except SaldoInsuficienteException as e:
-            self.__tela_compra.mostra_mensagem_erro(e)
-        except JahPossuiJogoException as e:
-            self.__tela_compra.mostra_mensagem_erro(e)
-
-    def historico_compras_usuario(self):
-        email = self.__tela_compra.historico_compras_usuario()
         while True:
             try:
-                usuario_existe = False
-                for usuario in self.__usuarios:
-                    if usuario.email == email:
-                        usuario_existe = True
-                        usuario_para_checar = usuario
-                        break
-                if not usuario_existe:
-                    raise UsuarioInvalidoException
-                break
+                dados = self.__tela_compra_cadastro.open(self.nome_jogos())
+                if dados[0] == 'Submit':
+                    usuario_obj = None
+                    for usuario in self.__controlador_sistema.controlador_usuario.dao.get_all():
+                        if usuario.email == dados[1]["email"] and usuario.senha == dados[1]["senha"]:
+                            usuario_obj = usuario
+                            break
+                    if usuario_obj is None:
+                        raise UsuarioInvalidoException
+                    jogo_obj = None
+                    for jogo in self.__controlador_sistema.controlador_jogo.dao.get_all():
+                        if jogo.nome == dados[1]["jogo"]:
+                            jogo_obj = jogo
+                            break
+                    if jogo_obj is None:
+                        raise JogoInvalidoException
+                    if usuario_obj is None:
+                        raise UsuarioInvalidoException
+                    if usuario_obj.cartao is not None:
+                        comprar_por_cartao = self.__tela_compra_cadastro.comfirmar_cartao()
+                    else:
+                        comprar_por_cartao = False
+                    if not comprar_por_cartao:
+                        if jogo_obj.preco > usuario_obj.saldo:
+                            raise SaldoInsuficienteException
+                    if jogo_obj.faixa_etaria > usuario_obj.idade:
+                        raise ValueError
+                    if jogo_obj in usuario_obj.jogos:
+                        raise JahPossuiJogoException
+                    compra = Compra(jogo_obj, usuario_obj)
+                    if not comprar_por_cartao:
+                        usuario_obj.debite(jogo_obj.preco)
+                    usuario_obj.incluir_jogo(jogo_obj)
+                    self.__compradao.add(compra.id, compra)
+                    self.__controlador_sistema.controlador_jogo.dao.add(jogo_obj.id, jogo_obj)
+                    self.__controlador_sistema.controlador_usuario.dao.add(usuario_obj.id, usuario_obj)
+                    self.__tela_compra.show_message("Sucesso", "Compra Realizada com sucesso")
+                    self.__tela_compra_cadastro.close()
+                    break
+                else:
+                    self.__tela_compra.show_message('Aviso', 'Processo Cancelado')
+                    self.__tela_compra_cadastro.close()
+                    break
+            except ValueError:
+                self.__tela_compra.show_message("Aviso!", "O Usuario nao possui a idade necessaria")
+            except SaldoInsuficienteException as e:
+                self.__tela_compra.show_message("Aviso!", str(e))
+            except JahPossuiJogoException as e:
+                self.__tela_compra.show_message("Aviso!", str(e))
             except UsuarioInvalidoException as e:
-                self.__tela_compra.mostra_mensagem_erro(e)
+                self.__tela_compra.show_message("Aviso!", str(e))
+            except JogoInvalidoException as e:
+                self.__tela_compra.show_message("Aviso!", str(e))
 
-        self.__tela_compra.mostra_mensagem_erro("---Historico de Compras---")
-        for compra in usuario_para_checar.compras:
-            self.__tela_compra.retorna_historico_compras({"nome": compra.jogo.nome, "preco": compra.jogo.preco,
-                                                          "desenvolvedora": compra.jogo.desenvolvedora.nome,
-                                                          "faixa_etaria": compra.jogo.faixa_etaria,
-                                                          "genero": compra.jogo.genero, "data": compra.data})
+    def historico_compras_usuario(self):
+        usuario = self.get_usuario()
+        if usuario is not None:
+            lista_compras = list()
+            for compra in usuario.compras:
+                lista_compras.append("\nJogo: " + compra.jogo.nome + "\nValor: " + str(compra.jogo.preco) +
+                                     "\nDesenvolvedora: " + compra.jogo.desenvolvedora.nome + "\nFaixa Etaria: " +
+                                     str(compra.jogo.faixa_etaria) + "\nGenero: " + compra.jogo.genero +
+                                     "\nData da compra: " + str(compra.data))
+            self.__tela_compra.show_message("Historico de Compras", "\n".join(lista_compras))
 
     def verifica_dados_compra(self):
-        jogo = self.get_jogo()
         usuario = self.get_usuario()
-        for compra in self.__compras:
-            if compra.usuario == usuario and compra.jogo == jogo:
-                self.__tela_compra.retorna_informacoes_compra({"jogo": compra.jogo.nome,
-                                                               "usuario": compra.usuario.nome, "data": compra.data})
+        if usuario is not None:
+            jogo = self.get_jogo()
+            if jogo is not None:
+                for compra in self.__compradao.get_all():
+                    if compra.usuario == usuario and compra.jogo == jogo:
+                        self.__tela_compra.show_message("Compra", "\nUsuario: " + usuario.nome +
+                                                        "\nData da compra: " + str(compra.data) + "Jogo: " + jogo.nome)
+                        break
 
     def historico_compras_jogo(self):
         jogo = self.get_jogo()
-        self.__tela_compra.mostra_mensagem_erro("---Historico de Compras---")
-        for compra in jogo.compras:
-            self.__tela_compra.retorna_informacoes_compra({"jogo": compra.jogo.nome, "usuario": compra.usuario.nome,
-                                                           "data": compra.data})
+        if jogo is not None:
+            lista_compras = list()
+            for compra in jogo.compras:
+                lista_compras.append("\nUsuario: " + compra.usuario.nome + "\nData da compra: " + str(compra.data))
+            self.__tela_compra.show_message("Historico de Compras", "\n".join(lista_compras))
 
     def listar_compras(self):
-        for compra in self.__compras:
-            self.__tela_compra.retorna_informacoes_compra({"jogo": compra.jogo.nome, "usuario": compra.usuario.nome,
-                                                           "data": compra.data})
+        lista_compras = list()
+        for compra in self.__compradao.get_all():
+            lista_compras.append("\nJogo: " + compra.jogo.nome + "\nUsuario: " + compra.usuario.nome +
+                                 "\nData da compra: " + str(compra.data))
+        self.__tela_compra.show_message("Historico de Compras", "\n".join(lista_compras))
+
+    def get_usuario(self):
+        while True:
+            try:
+                email = self.__tela_compra_usuario.open()
+                if email[0] == 'Submit':
+                    for usuario in self.__controlador_sistema.controlador_usuario.dao.get_all():
+                        if usuario.email == email[1]['email']:
+                            self.__tela_compra_usuario.close()
+                            return usuario
+                    raise UsuarioInvalidoException
+                else:
+                    self.__tela_compra.show_message('Aviso', 'Processo Cancelado')
+                    self.__tela_compra_usuario.close()
+                    return None
+            except UsuarioInvalidoException as e:
+                self.__tela_compra.show_message("Aviso!", str(e))
+                self.__tela_compra_usuario.close()
+
+    def get_jogo(self):
+        while True:
+            try:
+                nome = self.__tela_compra_jogo.open(self.nome_jogos())
+                if nome[0] == 'Submit':
+                    for jogo in self.__controlador_sistema.controlador_jogo.dao.get_all():
+                        if jogo.nome == nome[1]['jogo']:
+                            self.__tela_compra_jogo.close()
+                            return jogo
+                    raise JogoInvalidoException
+                else:
+                    self.__tela_compra.show_message('Aviso', 'Processo Cancelado')
+                    self.__tela_compra_jogo.close()
+                    return None
+            except JogoInvalidoException as e:
+                self.__tela_compra.show_message("Aviso!", str(e))
+                self.__tela_compra_jogo.close()
 
     def retorna_menu_principal(self):
         self.__continua_nesse_menu = False
 
-    def get_usuario(self):
-        while True:
-            dados_usuario = self.__tela_compra.encontrar_usuario()
-            usuario_email = dados_usuario["email"]
-            usuario_senha = dados_usuario["senha"]
-            try:
-                for usuario in self.__usuarios:
-                    if usuario.senha == usuario_senha and usuario.email == usuario_email:
-                        return usuario
-                    raise UsuarioInvalidoException
-            except UsuarioInvalidoException as e:
-                self.__tela_compra.mostra_mensagem_erro(e)
-
-    def get_jogo(self):
-        while True:
-            nome_jogo = self.__tela_compra.encontrar_jogo(self.nome_jogos())
-            try:
-                for jogo in self.__jogos:
-                    if jogo.nome == nome_jogo:
-                        return jogo
-                    raise NomeInvalidoException
-            except NomeInvalidoException as e:
-                self.__tela_compra.mostra_mensagem_erro(e)
-
     def nome_jogos(self):
         jogos = []
-        for jogo in self.__jogos:
+        for jogo in self.__controlador_sistema.controlador_jogo.dao.get_all():
             jogos.append(jogo.nome)
         return jogos
 
     @property
     def compras(self):
-        return self.__compras
+        return self.__compradao.get_all()
+
+    @property
+    def dao(self):
+        return self.__compradao
