@@ -66,6 +66,8 @@ class ControladorDesenvolvedora:
                                     raise NomeInvalidoException
                             desenvolvedora_mudar.nome = novo_nome[1][0]
                             self.__desenvolvedoradao.add(desenvolvedora_mudar.id, desenvolvedora_mudar)
+                            for jogo in desenvolvedora_mudar.jogos:
+                                self.__controlador_sistema.controlador_jogo.dao.add(jogo.id, jogo)
                             self.__tela_desenvolvedora.close()
                             break
                         else:

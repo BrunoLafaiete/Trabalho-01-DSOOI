@@ -108,20 +108,20 @@ class ControladorJogo:
 
                             jogo.nome = dados_jogo[1][0]
                             jogo.genero = dados_jogo[1][2]
-                            jogo.preco = dados_jogo[1][3]
-                            jogo.faixa_etaria = dados_jogo[1][4]
+                            jogo.preco = float(dados_jogo[1][4])
+                            jogo.faixa_etaria = int(dados_jogo[1][3])
                             if dados_jogo[1][1] != jogo.desenvolvedora.nome:
                                 for desenvolvedora in \
                                         self.__controlador_sistema.controlador_desenvolvedora.dao.get_all():
-                                    if desenvolvedora == jogo.desenvolvedora:
+                                    if desenvolvedora.nome == jogo.desenvolvedora.nome:
                                         desenvolvedora.excluir_jogo(jogo)
                                         self.__controlador_sistema.controlador_desenvolvedora.dao.add(desenvolvedora.id,
                                                                                                       desenvolvedora)
                                     elif dados_jogo[1][1] == desenvolvedora.nome:
                                         desenvolvedora.incluir_jogo(jogo)
                                         jogo.desenvolvedora = desenvolvedora
-                                        self.__controlador_sistema.controlador_desenvolvedora.dao.add(desenvolvedora.id,
-                                                                                                      desenvolvedora)
+                                        self.__controlador_sistema.controlador_desenvolvedora.dao.add(
+                                            jogo.desenvolvedora.id, jogo.desenvolvedora)
                             else:
                                 self.__controlador_sistema.controlador_desenvolvedora.dao.add(jogo.desenvolvedora.id,
                                                                                               jogo.desenvolvedora)
@@ -130,6 +130,7 @@ class ControladorJogo:
                                 self.__controlador_sistema.controlador_compra.dao.add(compra.id, compra)
                                 self.__controlador_sistema.controlador_usuario.dao.add(compra.usuario.id,
                                                                                        compra.usuario)
+                            self.__tela_jogo_alterar.close()
                             break
                         else:
                             self.__tela_jogo.show_message("Aviso", "Processo Cancelado")

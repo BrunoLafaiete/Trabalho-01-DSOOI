@@ -224,6 +224,9 @@ class ControladorComunidade:
                         obj_comunidade = self.comunidade_by_nome(comunidade[1]['comunidade'][0])
                         obj_comunidade.nome = novo_nome
                         obj_comunidade.descricao = nova_descricao
+                        self.__comunidadedao.add(obj_comunidade.id, obj_comunidade)
+                        for usuario in obj_comunidade.usuarios:
+                            self.__controlador_sistema.controlador_usuario.dao.add(usuario.id, usuario)
                     except NomeInvalidoException as e:
                         self.__tela_comunidade.show_message("Aviso", str(e))
                 else:
