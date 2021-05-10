@@ -59,6 +59,9 @@ class ControladorCartaodeCredito:
                         self.__tela_cartao_de_credito.show_message("Aviso", str(e))
                         self.__tela_cartao_cadastra.close()
                         break
+                    except NomeInvalidoException as e:
+                        self.__tela_cartao_de_credito.show_message("Aviso", str(e))
+                        self.__tela_cartao_cadastra.close()
                     except ValidadeInvalidaException as e:
                         self.__tela_cartao_de_credito.show_message("Aviso", str(e))
                         self.__tela_cartao_cadastra.close()
